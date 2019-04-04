@@ -2,23 +2,25 @@
 % Please edit documentation in R/collapse_ranges.R
 \name{collapse_ranges}
 \alias{collapse_ranges}
-\title{Collapses the consecutive date/time ranges into one record.}
+\title{Collapses the consecutive date or timestamp ranges into one record.}
 \usage{
-collapse_ranges(df, groups, start_var, end_var, range = "date",
-  max_gap = 0L, fmt = "\%Y-\%m-\%d")
+collapse_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
+  dimension = "date", max_gap = 0L, fmt = "\%Y-\%m-\%d")
 }
 \arguments{
+\item{df}{Your data frame}
+
 \item{groups}{Grouping variables}
 
 \item{start_var}{Start of the range}
 
 \item{end_var}{End of the range}
 
-\item{max_gap}{Gap between date/time ranges, e.g. for 0, default, it will put together all records where there is no gap in-between}
+\item{dimension}{Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'}
 
-\item{fmt}{The format of your date/time field, defaults to '%Y-%m-%d'.}
+\item{max_gap}{Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between}
 
-\item{dimension}{Indicate whether your range includes only dates ('date') or also time ('time'). Defaults to 'date'}
+\item{fmt}{The format of your date or timestamp field, defaults to YMD.}
 }
 \value{
 Returns a data frame (if initial input data.table, then data.table) with collapsed records.
