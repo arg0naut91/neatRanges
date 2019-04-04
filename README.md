@@ -10,7 +10,7 @@ The aim of `chronshape` is to provide tools for working with date or timestamp r
 
 It uses `data.table` in order to speed up the operations.
 
-You can install it *via* \`devtools::install\_github("arg0naut91/chronshape").
+You can install it *via* `devtools::install_github("arg0naut91/chronshape")`.
 
 Currently, only the `collapse_ranges` function is available. More functions coming up soon.
 
@@ -21,7 +21,7 @@ This function can be useful when we want to collapse several consecutive date or
 
 Let's say we have a data frame of different financial actors and their credit ratings for different time ranges.
 
-Now you can see that some of them are actually consecutive. Instead of 6 rows, we'd therefore like to get only 3.
+Now you can see that some of them are actually consecutive. Instead of 6 rows, we'd therefore like to get only 4.
 
         id rating start_date   end_date
     1 1111     A+ 2014-01-01 2014-12-31
@@ -57,7 +57,9 @@ df_collapsed
     3 2222     B- 2017-01-01 2017-01-31
     4 2222     B- 2018-01-01 2020-02-01
 
-We can address timestamps in a similar way, only now we need to specify the `dimension` as `timestamp`:
+We can address timestamps in a similar way, only now we need to specify the `dimension` as `timestamp`.
+
+Let's say that now we're dealing with individuals and the way they spend their time:
 
         id       diary          start_time            end_time
     1 1111     reading 2014-01-01 14:00:00 2014-01-01 14:59:59
