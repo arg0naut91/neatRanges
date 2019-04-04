@@ -39,9 +39,9 @@ Now you can see that some of them are actually consecutive. Instead of 6 rows, w
 
 We can do this as below. A bit of explanation of some of the arguments:
 
--   `dimension` defines whether we are dealing with dates or timestamps; default to dates;
+-   `dimension` defines whether we are dealing with dates or timestamps; defaults to dates;
 
--   `max_gap` defines what is considered as consecutive. By default, this means no gap whatsoever. If `dimension` is `date`, this means 0 days; in case of `timestamp`, it refers to seconds;
+-   `max_gap` defines what is considered as consecutive. By default, it is set to 0, this means no gap whatsoever. If `dimension` is `date`, this means 0 days; in case of `timestamp`, it refers to 0 seconds. A gap of 1 day / 1 second would be expressed as `max_gap = 1L`;
 
 -   `fmt` defines the format. By default, it uses `Y-M-D` for dates, and `Y-M-D H:M:OS` for timestamps. If your ranges are in another format, you need to modify that accordingly.
 
