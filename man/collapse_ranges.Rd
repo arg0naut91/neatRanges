@@ -5,7 +5,8 @@
 \title{Collapses the consecutive date or timestamp ranges into one record.}
 \usage{
 collapse_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
-  dimension = "date", max_gap = 0L, fmt = "\%Y-\%m-\%d")
+  dimension = "date", max_gap = 0L, fmt = "\%Y-\%m-\%d",
+  tz = "UTC", origin = "1970-01-01")
 }
 \arguments{
 \item{df}{Your data frame}
@@ -20,7 +21,11 @@ collapse_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
 
 \item{max_gap}{Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between}
 
-\item{fmt}{The format of your date or timestamp field, defaults to YMD.}
+\item{fmt}{The format of your date or timestamp field, defaults to YMD}
+
+\item{tz}{Time zone, defaults to UTC}
+
+\item{origin}{Origin for timestamp conversion, defaults to 1970-01-01}
 }
 \value{
 Returns a data frame (if initial input data.table, then data.table) with collapsed records.

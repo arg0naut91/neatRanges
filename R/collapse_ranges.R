@@ -8,7 +8,9 @@
 #' @param end_var End of the range
 #' @param max_gap Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between
 #' @param dimension Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'
-#' @param fmt The format of your date or timestamp field, defaults to YMD.
+#' @param fmt The format of your date or timestamp field, defaults to YMD
+#' @param tz Time zone, defaults to UTC
+#' @param origin Origin for timestamp conversion, defaults to 1970-01-01
 #'
 #' @return Returns a data frame (if initial input data.table, then data.table) with collapsed records.
 #'
@@ -24,7 +26,15 @@
 #'
 #' collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date")
 #' @export
-collapse_ranges <- function(df, groups = NULL, start_var = NULL, end_var = NULL, dimension = "date", max_gap = 0L, fmt = "%Y-%m-%d") {
+collapse_ranges <- function(df,
+                            groups = NULL,
+                            start_var = NULL,
+                            end_var = NULL,
+                            dimension = "date",
+                            max_gap = 0L,
+                            fmt = "%Y-%m-%d",
+                            tz = "UTC",
+                            origin = "1970-01-01") {
 
   max_gap <- max_gap + 1L
 
@@ -40,6 +50,8 @@ collapse_ranges <- function(df, groups = NULL, start_var = NULL, end_var = NULL,
   df_collapsed <- copy(df)
 
   if (dimension == "date") {
+    
+    calc_cummax_Date <- function(x) (setattr(cummax(unclass(x)), "class", c("Date", "IDate")))
 
     df_collapsed <- setDT(df_collapsed)[
       , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars][
@@ -49,14 +61,20 @@ collapse_ranges <- function(df, groups = NULL, start_var = NULL, end_var = NULL,
 
     if (fmt == "%Y-%m-%d") {
 
-      warning("Dimension 'timestamp' selected but format unchanged. Will try to convert to '%Y-%m-%d %H:%M:%OS'.")
+      warning("Dimension 'timestamp' selected but format unchanged. Will try to convert to '%Y-%m-%d %H:%M:%OS' ..")
 
       fmt <- "%Y-%m-%d %H:%M:%OS"
 
-      }
+    }
+    
+    calc_cummax_Time <- function(x) {
+      
+      x <- as.POSIXct(cummax(as.numeric(x)), tz = tz, origin = origin)
+      
+    }
 
     df_collapsed <- setDT(df_collapsed)[
-      , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt)), .SDcols = rangevars][
+      , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars][
         , max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
 
   } else { stop("The dimension argument has to be either 'date' or 'timestamp'.") }

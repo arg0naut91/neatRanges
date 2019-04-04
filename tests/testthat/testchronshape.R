@@ -75,15 +75,16 @@ test_that("collapse_ranges functions with timestamps", {
           class = "factor"
         ),
         start_time = structure(
-          c(1388581200, 1388584800, 1420120800,
-            1420128000),
-          class = c("POSIXct", "POSIXt")
+          c(1388584800, 1388588400, 1420124400,
+            1420131600),
+          class = c("POSIXct", "POSIXt"),
+          tzone = "UTC"
         ),
         end_time = structure(
-          c(1388584799,
-            1388599200, 1420124399, 1420142400),
-          class = c("POSIXct",
-                    "POSIXt")
+          c(1388588399, 1388602800, 1420127999,
+            1420146000),
+          class = c("POSIXct", "POSIXt"),
+          tzone = "UTC"
         )
       ),
       row.names = c(NA,-4L),
