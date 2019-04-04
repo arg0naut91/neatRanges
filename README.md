@@ -12,7 +12,11 @@ It uses `data.table` in order to speed up the operations.
 
 You can install it *via* `devtools::install_github("arg0naut91/chronshape")`.
 
-Currently, only the `collapse_ranges` function is available. More functions coming up soon.
+However, please note that:
+
+-   Currently, only the `collapse_ranges` function is available. More functions coming up soon;
+
+-   Even the `collapse_ranges` function is in its very early state, and very much prone to bugs, especially when it comes to `POSIXct` formats.
 
 collapse\_ranges
 ----------------
