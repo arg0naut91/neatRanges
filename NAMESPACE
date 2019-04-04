@@ -1,0 +1,2 @@
+export(collapse_ranges)
+import(data.table)
