@@ -1,6 +1,8 @@
 chronshape
 ================
 
+[![Travis build status](https://travis-ci.org/arg0naut91/chronshape.svg?branch=master)](https://travis-ci.org/arg0naut91/chronshape) [![codecov](https://codecov.io/gh/arg0naut91/chronshape/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/chronshape)
+
 The aim of `chronshape` is to provide tools for working with date or timestamp ranges, namely:
 
 -   Collapsing,
@@ -63,6 +65,12 @@ df_collapsed
 
 We can address timestamps in a similar way, only now we need to specify the `dimension` as `timestamp`.
 
+Note that here two additional arguments are important:
+
+-   `tz` defines the time zone - by default, it is set to `UTC`;
+
+-   `origin` specifies the origin for indexing/converting the dates; by default, it is set to `1970-01-01`.
+
 Let's say that now we're dealing with individuals and the way they spend their time:
 
         id       diary          start_time            end_time
@@ -80,12 +88,14 @@ df_collapsed <- collapse_ranges(df,
                                 groups = c("id", "diary"), 
                                 start_var = "start_time", 
                                 end_var = "end_time", 
-                                dimension = "timestamp")
+                                dimension = "timestamp",
+                                tz = 'UTC',
+                                origin = '1970-01-01')
 ```
 
     Warning in collapse_ranges(df, groups = c("id", "diary"), start_var =
     "start_time", : Dimension 'timestamp' selected but format unchanged. Will
-    try to convert to '%Y-%m-%d %H:%M:%OS'.
+    try to convert to '%Y-%m-%d %H:%M:%OS' ..
 
 ``` r
 df_collapsed
