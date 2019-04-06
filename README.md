@@ -21,10 +21,10 @@ You can install it *via*
 
 However, please note that:
 
-  - Currently, only the `collapse_ranges` function is available. More
-    functions coming up soon;
+  - Currently, only `collapse_ranges` and `expand_times`/`expand_dates`
+    functions are available. More functions coming up soon;
 
-  - Even the `collapse_ranges` function is in its very early state, and
+  - Even the before-mentioned functions are in their early state, and
     very much prone to bugs, especially when it comes to `POSIXct`
     formats.
 
@@ -134,4 +134,92 @@ df_collapsed
 2 1111 watching TV 2014-01-01 15:00:00 2014-01-01 19:00:00
 3 2222    sleeping 2015-01-01 15:00:00 2015-01-01 15:59:59
 4 2222    sleeping 2015-01-01 17:00:00 2015-01-01 21:00:00
+```
+
+## Expand\_\* family
+
+These are light-weight functions that allow the user to expand
+date/timestamp range into a column of elements of the sequence.
+
+Let’s say we have a data frame with `start` and `end` which we would
+like to expand:
+
+``` 
+    id gender      start        end
+1 1111      M 2018-01-01 2018-01-05
+2 2222      F 2019-01-01 2019-01-07
+3 3333      F 2020-01-01 2020-01-08
+```
+
+This can be expanded with calling the `expand_dates` function with the
+following arguments:
+
+  - `start_var` and `end_var` as column names of our range;
+
+  - `name` as the future name of our column. This is optional and
+    defaults to ‘Expanded’;
+
+  - `vars_to_keep` as indicators of which columns we’d like to keep when
+    expanding (optional);
+
+  - `unit` which defines the unit for expansion - defaults to each day
+    in the sequence.
+
+Other optional argument is also `fmt` where you can set the format of
+your dates - by default, it is *%Y-%m-%d*.
+
+``` r
+df_exp <- expand_dates(df,
+                       start_var = "start",
+                       end_var = "end",
+                       name = "exp_seqs",
+                       vars_to_keep = c("id", "gender"),
+                       unit = "day"
+                       )
+head(df_exp)
+```
+
+``` 
+    id gender   exp_seqs
+1 1111      M 2018-01-01
+2 1111      M 2018-01-02
+3 1111      M 2018-01-03
+4 1111      M 2018-01-04
+5 1111      M 2018-01-05
+6 2222      F 2019-01-01
+```
+
+You can also tackle *timestamp* formats in a similar way with
+`expand_times`:
+
+``` 
+    id gender               start                 end
+1 1111      M 2018-01-01 15:00:00 2018-01-01 18:30:00
+2 2222      F 2019-01-01 14:00:00 2019-01-01 17:30:00
+3 3333      F 2020-01-01 19:00:00 2020-01-02 02:00:00
+```
+
+The arguments are pretty much the same, except that `unit` defaults to
+*hour*, `fmt` to *Y%-%m-%d %H:%M:%OS*, and you can set an additional
+argument `tz` (time zone; defaults to UTC).
+
+``` r
+df_exp <- expand_times(df,
+                       start_var = "start",
+                       end_var = "end",
+                       name = "exp_seqs",
+                       vars_to_keep = c("id", "gender"),
+                       unit = "hour"
+                       )
+head(df_exp)
+```
+
+``` 
+    id gender            exp_seqs
+1 1111      M 2018-01-01 15:00:00
+2 1111      M 2018-01-01 16:00:00
+3 1111      M 2018-01-01 17:00:00
+4 1111      M 2018-01-01 18:00:00
+5 2222      F 2019-01-01 14:00:00
+6 2222      F 2019-01-01 15:00:00
 ```
