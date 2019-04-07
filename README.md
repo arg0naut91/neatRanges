@@ -21,8 +21,9 @@ You can install it *via*
 
 However, please note that:
 
-  - Currently, only `collapse_ranges` and `expand_times`/`expand_dates`
-    functions are available. More functions coming up soon;
+  - Currently, `collapse_ranges`, `partition_ranges` (only for years and
+    months) and `expand_times`/`expand_dates` functions are available.
+    Additional developments coming up soon;
 
   - Even the before-mentioned functions are in their early state, and
     very much prone to bugs, especially when it comes to `POSIXct`
