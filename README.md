@@ -136,7 +136,76 @@ df_collapsed
 4 2222    sleeping 2015-01-01 17:00:00 2015-01-01 21:00:00
 ```
 
-## Expand\_\* family
+## partition\_ranges
+
+This function allows users to further split their ranges.
+
+Currently, this allows only splitting of `Date` formats (partitioning by
+either year or month).
+
+Consider the following data frame:
+
+``` 
+  group      start        end
+1     a 2017-05-01 2018-09-01
+2     a 2019-04-03 2020-04-03
+3     b 2011-03-03 2012-05-03
+4     b 2014-05-07 2016-04-02
+5     c 2017-02-01 2017-04-05
+```
+
+Partitioning by year (default mode) would look like:
+
+``` r
+part_by_year <- partition_ranges(df, 
+                               start_var = "start", 
+                               end_var = "end",
+                               partition_by = "year",
+                               groups = "group")
+
+head(part_by_year)
+```
+
+``` 
+  group      start        end
+1     a 2017-05-01 2017-12-31
+2     a 2018-01-01 2018-09-01
+3     a 2019-04-03 2019-12-31
+4     a 2020-01-01 2020-04-03
+5     b 2011-03-03 2011-12-31
+6     b 2012-01-01 2012-05-03
+```
+
+On the other hand, partitioning by month would take the following
+format:
+
+``` r
+part_by_month <- partition_ranges(df, 
+                               start_var = "start", 
+                               end_var = "end",
+                               partition_by = "month",
+                               groups = "group")
+
+head(part_by_month)
+```
+
+``` 
+  group      start        end
+1     a 2017-05-01 2017-05-31
+2     a 2017-06-01 2017-06-30
+3     a 2017-07-01 2017-07-31
+4     a 2017-08-01 2017-08-31
+5     a 2017-09-01 2017-09-30
+6     a 2017-10-01 2017-10-31
+```
+
+Note that the `groups` argument is optional and basically specifies
+which columns you’d like to keep.
+
+There is also `fmt` argument that specifies the `Date` format (set to
+*%Y-%m-%d* by default).
+
+## expand\_\* family
 
 These are light-weight functions that allow the user to expand
 date/timestamp range into a column of elements of the sequence.
@@ -190,7 +259,11 @@ head(df_exp)
 ```
 
 You can also tackle *timestamp* formats in a similar way with
-`expand_times`:
+`expand_times`.
+
+The arguments are pretty much the same, except that `unit` defaults to
+*hour*, `fmt` to *Y%-%m-%d %H:%M:%OS*, and you can set an additional
+argument `tz` (time zone; defaults to UTC).
 
 ``` 
     id gender               start                 end
@@ -198,10 +271,6 @@ You can also tackle *timestamp* formats in a similar way with
 2 2222      F 2019-01-01 14:00:00 2019-01-01 17:30:00
 3 3333      F 2020-01-01 19:00:00 2020-01-02 02:00:00
 ```
-
-The arguments are pretty much the same, except that `unit` defaults to
-*hour*, `fmt` to *Y%-%m-%d %H:%M:%OS*, and you can set an additional
-argument `tz` (time zone; defaults to UTC).
 
 ``` r
 df_exp <- expand_times(df,
