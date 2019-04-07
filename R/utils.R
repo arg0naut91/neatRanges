@@ -3,5 +3,8 @@ globalVariables(c("gap_between",
                   "max_until_now",
                   "Expanded",
                   "rn",
-                  ".")
+                  ".",
+                  "rl",
+                  "seqsEnd",
+                  "seqs")
                 )
