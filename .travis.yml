@@ -7,9 +7,13 @@ warnings_are_errors: true
 
 os:
   - linux
+  - osx
 
 r_packages:
   - covr
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
+  
+before_install:
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm; fi  
