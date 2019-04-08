@@ -6,5 +6,6 @@ globalVariables(c("gap_between",
                   ".",
                   "rl",
                   "seqsEnd",
-                  "seqs")
+                  "seqs",
+                  "nrow")
                 )

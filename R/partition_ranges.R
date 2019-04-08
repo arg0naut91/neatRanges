@@ -24,7 +24,7 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = 
     substitute(start_var),
     substitute(end_var)
   )
-  
+
   partitioned <- setDT(copy(df))[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
   
   if (partition_by == "year") {
@@ -41,14 +41,19 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = 
   
   else if (partition_by == "month") {
     
-    grp <- c(groups, end_var)
+    grp <- c("nrow", groups, end_var)
     grp2ndlev <- c(groups, start_var)
     
-    partitioned <- partitioned[, .(seqs = seq.Date(get(start_var), get(end_var), by = "month")), by = mget(grp)][
+    partitionedIn <- partitioned[(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
+    partitionedOut <- partitioned[!(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
+
+    partitionedOut <- partitionedOut[, nrow := 1:.N][
+      , .(seqs = seq.Date(get(start_var), get(end_var), by = "month")), by = mget(grp)][
+        , seqs := c(seqs[1], as.Date(paste0(format(seqs[-1], "%Y-%m"), "-01"))), by = nrow][
       
       , seqsEnd := { 
         
-        tmp <- as.POSIXlt(seqs); 
+        tmp <- as.POSIXlt(as.Date(paste0(format(seqs, "%Y-%m"), "-01"))); 
         tmp$mon <- tmp$mon + 1; 
         return(
           as.Date(as.character(as.POSIXct(tmp))) - 1
@@ -57,6 +62,21 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = 
       }
       
       ][, (start_var) := seqs][, lapply(.SD, function(x) pmin(x, seqsEnd)), by = mget(grp2ndlev), .SDcols = substitute(end_var)]
+    
+    nms <- names(partitionedOut)
+    
+    if (nrow(partitionedIn) > 0) {
+      
+      partitionedIn <- partitionedIn[, names(partitionedIn) %in% nms, with = FALSE]
+      partitioned <- rbind(partitionedIn, partitionedOut) 
+      
+      } else {
+        
+        partitioned <- partitionedOut
+        
+      }
+    
+    partitioned <- setorderv(partitioned, nms)
     
   } else {
     
