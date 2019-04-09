@@ -2,12 +2,12 @@
 
 language: R
 sudo: false
-dist: trusty
 cache: packages
 warnings_are_errors: true
 
 os:
   - linux
+  #- osx
 
 r_packages:
   - covr
