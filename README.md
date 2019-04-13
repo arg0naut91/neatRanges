@@ -162,7 +162,7 @@ part_by_year <- partition_ranges(df,
                                start_var = "start", 
                                end_var = "end",
                                partition_by = "year",
-                               groups = "group")
+                               vars_to_keep = "group")
 
 head(part_by_year)
 ```
@@ -185,7 +185,7 @@ part_by_month <- partition_ranges(df,
                                start_var = "start", 
                                end_var = "end",
                                partition_by = "month",
-                               groups = "group")
+                               vars_to_keep = "group")
 
 head(part_by_month)
 ```
@@ -200,7 +200,7 @@ head(part_by_month)
 6     a 2017-10-01 2017-10-31
 ```
 
-Note that the `groups` argument is optional and basically specifies
+Note that the `vars_to_keep` argument is optional and basically specifies
 which columns you’d like to keep.
 
 There is also `fmt` argument that specifies the `Date` format (set to
