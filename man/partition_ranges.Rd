@@ -5,7 +5,7 @@
 \title{Split ranges into multiple records}
 \usage{
 partition_ranges(df, start_var, end_var, fmt = "\%Y-\%m-\%d",
-  groups = NULL, partition_by = "year")
+  vars_to_keep = NULL, partition_by = "year")
 }
 \arguments{
 \item{df}{Your data frame (can also be a data.table or a tibble)}
@@ -16,7 +16,7 @@ partition_ranges(df, start_var, end_var, fmt = "\%Y-\%m-\%d",
 
 \item{fmt}{Format of the date; defaults to Y-m-d}
 
-\item{groups}{Groups (i.e. any column you'd like to retain) (optional)}
+\item{vars_to_keep}{Any column you'd like to retain (optional)}
 
 \item{partition_by}{How should the range be partitioned ('year' or 'month'); defaults to 'year'}
 }

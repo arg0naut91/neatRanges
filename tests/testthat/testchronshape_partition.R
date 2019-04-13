@@ -99,7 +99,7 @@ test_that("partition_ranges is functional when partitioning by month", {
                                    17256, 17261, 17561, 17927, 17955, 17960), class = "Date")), row.names = c(NA, 
                                                                                                               -75L), class = "data.frame")
   
-  output_foo <- partition_ranges(df, "start", "end", groups = "group", partition_by = "month")
+  output_foo <- partition_ranges(df, "start", "end", vars_to_keep = "group", partition_by = "month")
   
   expect_equal(output, output_foo)
   

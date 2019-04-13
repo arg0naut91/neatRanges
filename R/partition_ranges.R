@@ -4,7 +4,7 @@
 #' @param start_var Start variable
 #' @param end_var End variable
 #' @param fmt Format of the date; defaults to Y-m-d
-#' @param groups Groups (i.e. any column you'd like to retain) (optional)
+#' @param vars_to_keep Any column you'd like to retain (optional)
 #' @param partition_by How should the range be partitioned ('year' or 'month'); defaults to 'year'
 #'
 #' @return Returns a data frame with start, end and optional grouping columns 
@@ -18,7 +18,7 @@
 #' 
 #' partition_ranges(df, "start", "end", partition_by = "month")
 #' @export
-partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = NULL, partition_by = "year") {
+partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_keep = NULL, partition_by = "year") {
   
   rangevars <- c(
     substitute(start_var),
@@ -29,7 +29,7 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = 
   
   if (partition_by == "year") {
     
-    grp <- c("rl", groups)
+    grp <- c("rl", vars_to_keep)
     
     partitioned <- partitioned[partitioned[, rep(.I, 1 + year(get(end_var)) - year(get(start_var)))]][
         , rl := rleid(get(start_var))][
@@ -41,8 +41,8 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", groups = 
   
   else if (partition_by == "month") {
     
-    grp <- c("nrow", groups, end_var)
-    grp2ndlev <- c(groups, start_var)
+    grp <- c("nrow", vars_to_keep, end_var)
+    grp2ndlev <- c(vars_to_keep, start_var)
     
     partitionedIn <- partitioned[(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
     partitionedOut <- partitioned[!(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
