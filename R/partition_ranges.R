@@ -27,6 +27,16 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
 
   partitioned <- setDT(copy(df))[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
   
+  ############################################################################################################
+  #
+  # The partitioning by year is a functional form of an answer to a Stack Overflow's question.
+  #
+  # Answer: https://stackoverflow.com/questions/50729220/split-date-into-several-chunks-ending-by-yyyy-12-31
+  #
+  # Author's profile: https://stackoverflow.com/users/2204410/jaap
+  #
+  ############################################################################################################
+  
   if (partition_by == "year") {
     
     grp <- c("rl", vars_to_keep)

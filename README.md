@@ -4,14 +4,14 @@ chronshape
 [![Travis build
 status](https://travis-ci.org/arg0naut91/chronshape.svg?branch=master)](https://travis-ci.org/arg0naut91/chronshape)
 [![codecov](https://codecov.io/gh/arg0naut91/chronshape/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/chronshape)
-[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 The aim of `chronshape` is to provide tools for working with date or
 timestamp ranges, namely:
 
-  - Collapsing,
-  - Partitioning,
-  - Expanding,
+  - Collapsing,  
+  - Partitioning,  
+  - Expanding,  
   - Filling the gaps between ranges.
 
 It uses `data.table` in order to speed up the operations.
@@ -60,9 +60,9 @@ We can do this as below. A bit of explanation of some of the arguments:
     this means 0 days; in case of `timestamp`, it refers to 0 seconds. A
     gap of 1 day / 1 second would be expressed as `max_gap = 1L`;
 
-  - `fmt` defines the format. By default, it uses `Y-M-D` for dates, and
-    `Y-M-D H:M:OS` for timestamps. If your ranges are in another format,
-    you need to modify that accordingly.
+  - `fmt` defines the format. By default, it uses `%Y-%m-%d` for dates,
+    and `%Y-%m-%d %H:%M:%OS` for timestamps. If your ranges are in
+    another format, you need to modify that accordingly.
 
 <!-- end list -->
 
@@ -104,9 +104,9 @@ their time:
 1 1111     reading 2014-01-01 14:00:00 2014-01-01 14:59:59
 2 1111 watching TV 2014-01-01 15:00:00 2014-01-01 16:29:59
 3 1111 watching TV 2014-01-01 16:30:00 2014-01-01 19:00:00
-4 2222    sleeping 2015-01-01 15:00:00 2015-01-01 15:59:59
-5 2222    sleeping 2015-01-01 17:00:00 2015-01-01 18:59:59
-6 2222    sleeping 2015-01-01 19:00:00 2015-01-01 21:00:00
+4 2222     working 2015-01-01 15:00:00 2015-01-01 15:59:59
+5 2222     working 2015-01-01 17:00:00 2015-01-01 18:59:59
+6 2222     working 2015-01-01 19:00:00 2015-01-01 21:00:00
 ```
 
 If we don’t specify the format, it will throw a warning:
@@ -133,8 +133,8 @@ df_collapsed
     id       diary          start_time            end_time
 1 1111     reading 2014-01-01 14:00:00 2014-01-01 14:59:59
 2 1111 watching TV 2014-01-01 15:00:00 2014-01-01 19:00:00
-3 2222    sleeping 2015-01-01 15:00:00 2015-01-01 15:59:59
-4 2222    sleeping 2015-01-01 17:00:00 2015-01-01 21:00:00
+3 2222     working 2015-01-01 15:00:00 2015-01-01 15:59:59
+4 2222     working 2015-01-01 17:00:00 2015-01-01 21:00:00
 ```
 
 ## partition\_ranges
@@ -158,11 +158,11 @@ Consider the following data frame:
 Partitioning by year (default mode) would look like:
 
 ``` r
-part_by_year <- partition_ranges(df, 
-                               start_var = "start", 
-                               end_var = "end",
-                               partition_by = "year",
-                               vars_to_keep = "group")
+part_by_year <- partition_ranges(df,
+                                 start_var = "start",
+                                 end_var = "end",
+                                 partition_by = "year",
+                                 vars_to_keep = "group")
 
 head(part_by_year)
 ```
@@ -181,11 +181,11 @@ On the other hand, partitioning by month would take the following
 format:
 
 ``` r
-part_by_month <- partition_ranges(df, 
-                               start_var = "start", 
-                               end_var = "end",
-                               partition_by = "month",
-                               vars_to_keep = "group")
+part_by_month <- partition_ranges(df,
+                                  start_var = "start",
+                                  end_var = "end",
+                                  partition_by = "month",
+                                  vars_to_keep = "group")
 
 head(part_by_month)
 ```
@@ -200,11 +200,11 @@ head(part_by_month)
 6     a 2017-10-01 2017-10-31
 ```
 
-Note that the `vars_to_keep` argument is optional and basically specifies
-which columns you’d like to keep.
+Note that the `vars_to_keep` argument is optional and basically
+specifies which columns you’d like to keep.
 
 There is also `fmt` argument that specifies the `Date` format (set to
-*%Y-%m-%d* by default).
+`%Y-%m-%d` by default).
 
 ## expand\_\* family
 
@@ -236,7 +236,7 @@ following arguments:
     in the sequence.
 
 Other optional argument is also `fmt` where you can set the format of
-your dates - by default, it is *%Y-%m-%d*.
+your dates - by default, it is `%Y-%m-%d`.
 
 ``` r
 df_exp <- expand_dates(df,
@@ -263,8 +263,8 @@ You can also tackle *timestamp* formats in a similar way with
 `expand_times`.
 
 The arguments are pretty much the same, except that `unit` defaults to
-*hour*, `fmt` to *Y%-%m-%d %H:%M:%OS*, and you can set an additional
-argument `tz` (time zone; defaults to UTC).
+`hour`, `fmt` to `%Y-%m-%d %H:%M:%OS`, and you can set an additional
+argument `tz` (time zone; defaults to `UTC`).
 
 ``` 
     id gender               start                 end
