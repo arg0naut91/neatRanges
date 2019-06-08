@@ -20,12 +20,10 @@
 #' @export
 partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_keep = NULL, partition_by = "year") {
   
-  rangevars <- c(
-    substitute(start_var),
-    substitute(end_var)
-  )
-
-  partitioned <- setDT(copy(df))[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+  rangevars <- c(substitute(start_var), substitute(end_var))
+  partitioned <- setDT(copy(df))[, `:=`((rangevars), 
+                                        lapply(.SD, function(x) as.Date(as.character(x), format = fmt))), 
+                                 .SDcols = rangevars]
   
   ############################################################################################################
   #
@@ -38,70 +36,61 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
   ############################################################################################################
   
   if (partition_by == "year") {
-    
-    grp <- c("rl", vars_to_keep)
-    
-    partitioned <- partitioned[partitioned[, rep(.I, 1 + year(get(end_var)) - year(get(start_var)))]][
-        , rl := rleid(get(start_var))][
-          , (start_var) := pmax(get(start_var)[1], as.Date(paste0(year(get(start_var)[1]) + 0:(.N-1), '-01-01'))), by = mget(grp)][
-            , (end_var) := pmin(get(end_var)[.N], as.Date(paste0(year(get(end_var)[.N]) - (.N-1):0, '-12-31'))), by = mget(grp)][
-              , "rl" := NULL]
-    
+    grpRnD <- c("rl", vars_to_keep)
+    partitioned <- partitioned[partitioned[, rep(.I, 1 + 
+                                                   year(get(end_var)) - year(get(start_var)))]][
+                                                     , `:=`(rl,  rleid(get(start_var)))][
+                                                       , `:=`((start_var), pmax(get(start_var)[1], as.Date(paste0(year(get(start_var)[1]) + 0:(.N - 1), "-01-01")))), by = mget(grpRnD)][
+                                                         , `:=`((end_var), pmin(get(end_var)[.N], as.Date(paste0(year(get(end_var)[.N]) - (.N - 1):0, "-12-31")))), by = mget(grpRnD)][
+                                                           ,  `:=`("rl", NULL)]
   }
-  
   else if (partition_by == "month") {
-    
-    grp <- c("nrow", vars_to_keep, end_var)
+    grpRnD <- c("nrow", vars_to_keep, start_var, end_var)
     grp2ndlev <- c(vars_to_keep, start_var)
-    
-    partitionedIn <- partitioned[(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
-    partitionedOut <- partitioned[!(format(get(start_var), "%Y-%m") == format(get(end_var), "%Y-%m")), ]
-
-    partitionedOut <- partitionedOut[, nrow := 1:.N][
-      , .(seqs = seq.Date(get(start_var), get(end_var), by = "month")), by = mget(grp)][
-        , seqs := c(seqs[1], as.Date(paste0(format(seqs[-1], "%Y-%m"), "-01"))), by = nrow][
-      
-      , seqsEnd := { 
+    partitionedIn <- partitioned[(format(get(start_var), 
+                                         "%Y-%m") == format(get(end_var), "%Y-%m")), 
+                                 ]
+    partitionedOut <- partitioned[!(format(get(start_var), 
+                                           "%Y-%m") == format(get(end_var), "%Y-%m")), 
+                                  ]
+    partitionedOut <- partitionedOut[, st_seq := as.Date(paste0(format(get(start_var), "%Y-%m"), "-01"))][
+      , end_seq := { 
         
-        tmp <- as.POSIXlt(as.Date(paste0(format(seqs, "%Y-%m"), "-01"))); 
-        tmp$mon <- tmp$mon + 1; 
-        return(
-          as.Date(as.character(as.POSIXct(tmp))) - 1
-        ) 
-        
+        end_seq <- as.POSIXlt(as.Date(paste0(format(get(end_var), "%Y-%m"), "-01")))
+        end_seq$mon <- end_seq$mon + 1
+        return(as.Date(as.character(as.POSIXct(end_seq))) - 1)
       }
-      
-      ][, (start_var) := seqs][, lapply(.SD, function(x) pmin(x, seqsEnd)), by = mget(grp2ndlev), .SDcols = substitute(end_var)]
+      ]
+    
+    partitionedOut <- partitionedOut[, `:=`(nrow, 1:.N)][
+      , .(seqs = seq.Date(st_seq, end_seq, by = "month")), by = mget(grpRnD)][
+        , `:=`(seqs, c(get(start_var)[1], seqs[-1])), by = nrow][
+          , `:=`(seqsEnd, {
+            tmp <- as.POSIXlt(as.Date(paste0(format(seqs, "%Y-%m"), "-01")))
+            tmp$mon <- tmp$mon + 1
+            return(as.Date(as.character(as.POSIXct(tmp))) - 1)
+          })][, `:=`((start_var), seqs)][, lapply(.SD, function(x) pmin(x, seqsEnd)), 
+                                         by = mget(grp2ndlev), 
+                                         .SDcols = substitute(end_var)]
     
     nms <- names(partitionedOut)
-    
     if (nrow(partitionedIn) > 0) {
-      
-      partitionedIn <- partitionedIn[, names(partitionedIn) %in% nms, with = FALSE]
-      partitioned <- rbind(partitionedIn, partitionedOut) 
-      
-      } else {
-        
-        partitioned <- partitionedOut
-        
-      }
-    
+      partitionedIn <- partitionedIn[, names(partitionedIn) %in% 
+                                       nms, with = FALSE]
+      partitioned <- rbind(partitionedIn, partitionedOut)
+    }
+    else {
+      partitioned <- partitionedOut
+    }
     partitioned <- setorderv(partitioned, nms)
-    
-  } else {
-    
+  }
+  else {
     stop("partition_by argument has to be either 'year' or 'month'.")
-    
   }
-  
   if (!any(class(df) %in% "data.table")) {
-    
     return(setDF(partitioned))
-    
-  } else {
-    
-    return(partitioned)
-    
   }
-    
+  else {
+    return(partitioned)
+  }
 }
