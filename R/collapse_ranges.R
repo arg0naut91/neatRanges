@@ -43,17 +43,18 @@ collapse_ranges <- function(df,
   group_by_args_2lvl <- c(groups, cumidx)
 
   rangevars <- c(
-    substitute(start_var),
-    substitute(end_var)
+    start_var,
+    end_var
   )
 
   df_collapsed <- copy(df)
+  df_collapsed <- setDT(df_collapsed)[order(get(groups), get(start_var)), ]
 
   if (dimension == "date") {
     
     calc_cummax_Date <- function(x) (setattr(cummax(unclass(x)), "class", c("Date", "IDate")))
 
-    df_collapsed <- setDT(df_collapsed)[
+    df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars][
         , max_until_now := shift(calc_cummax_Date(get(end_var))), by = mget(group_1stlvl)]
 
@@ -73,7 +74,7 @@ collapse_ranges <- function(df,
       
     }
 
-    df_collapsed <- setDT(df_collapsed)[
+    df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars][
         , max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
 
