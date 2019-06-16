@@ -8,5 +8,7 @@ globalVariables(c("gap_between",
                   "st_seq",
                   "seqsEnd",
                   "seqs",
-                  "nrow")
+                  "nrow",
+                  "gapFlag",
+                  "st_tmp")
                 )
