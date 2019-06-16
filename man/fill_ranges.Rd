@@ -2,10 +2,10 @@
 % Please edit documentation in R/fill_ranges.R
 \name{fill_ranges}
 \alias{fill_ranges}
-\title{Fills the gaps between ranges (where gap is defined as more than 1 day/second of difference).}
+\title{Fill the gaps between ranges.}
 \usage{
 fill_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
-  dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
+  fill = NULL, dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
   origin = "1970-01-01")
 }
 \arguments{
@@ -17,6 +17,8 @@ fill_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
 
 \item{end_var}{End of the range}
 
+\item{fill}{Fill the missing values for values coresponding to missing ranges, e.g. 'colname1 = 0, colname2 = Missing'}
+
 \item{dimension}{Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'}
 
 \item{fmt}{The format of your date or timestamp field, defaults to YMD}
@@ -26,10 +28,10 @@ fill_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
 \item{origin}{Origin for timestamp conversion, defaults to 1970-01-01}
 }
 \value{
-Returns a data frame (if initial input data.table, then data.table) with missing ranges.
+Returns ordered data frame (if initial input data.table, then data.table) with added missing ranges.
 }
 \description{
-Columns that are not start/end dates or grouping variables are returned with NA as values for missing ranges.
+Fill the gaps between ranges.
 }
 \examples{
 df <- data.frame(
@@ -39,5 +41,5 @@ end = c("2008-02-05", "2013-04-05", "2009-06-03", "2013-02-17", "2021-04-21"),
 cost = c(143, 144, 105, 153, 124)
 )
 
-fill_ranges(df, start_var = "start", end_var = "end", groups = c("group"))
+fill_ranges(df, start_var = "start", end_var = "end", groups = "group")
 }

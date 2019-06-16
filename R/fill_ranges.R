@@ -1,11 +1,10 @@
-#' Fill the gaps between ranges (where gap is defined as more than 1 day/second of difference).
-#' 
-#' Columns that are not start/end dates or grouping variables are returned with NA as values for all missing ranges. 
+#' Fill the gaps between ranges.
 #'
 #' @param df Your data frame
 #' @param groups Grouping variables
 #' @param start_var Start of the range
 #' @param end_var End of the range
+#' @param fill Fill the missing values for values coresponding to missing ranges, e.g. 'colname1 = 0, colname2 = Missing'
 #' @param dimension Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'
 #' @param fmt The format of your date or timestamp field, defaults to YMD
 #' @param tz Time zone, defaults to UTC
@@ -27,6 +26,7 @@ fill_ranges <- function(df,
                         groups = NULL,
                         start_var = NULL,
                         end_var = NULL,
+                        fill = NULL,
                         dimension = "date",
                         fmt = "%Y-%m-%d",
                         tz = "UTC",
@@ -39,7 +39,8 @@ fill_ranges <- function(df,
   )
   
   groupsArrange <- c(groups, start_var)
-  allCols <- c(groups, rangevars)
+  allCols <- names(df)
+  colsToRetain <- c(groups, rangevars)
   
   dfCopy <- copy(df)
   
@@ -70,9 +71,26 @@ fill_ranges <- function(df,
   dfFilled <- dfFilled[, gapFlag := shift(get(end_var)) < (get(start_var) - 1L), by = mget(groups)][
     , st_tmp := get(start_var)][
       , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var)), by = mget(groups)][
-        , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)][
-          !is.na(get(start_var)), mget(allCols)
-          ]
+        , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)]
+  
+  if (!is.null(fill)) {
+    
+    splitFill <- unlist(lapply(strsplit(fill, split = "=|,"), trimws))
+    
+    nms <- splitFill[seq(1, length(splitFill), 2)]
+    vals <- splitFill[seq(2, length(splitFill), 2)]
+    
+    dfFilled <- dfFilled[, (nms) := lapply(.SD, as.character), .SDcols = nms][
+      , (nms) := as.list(vals)
+      ]
+    
+    dfFilled <- dfFilled[!is.na(get(start_var)), mget(allCols)]
+    
+  } else {
+    
+    dfFilled <- dfFilled[!is.na(get(start_var)), mget(colsToRetain)]
+    
+  }
   
   dfFinal <- rbindlist(list(dfCopy, dfFilled), fill = T)
   

@@ -363,12 +363,12 @@ The function adds missing ranges to a table. It supports both `Date` and
 `POSIXct` formats; by default, it assumes the range columns are dates.
 
 ``` 
-  group      start        end cost
-1     a 2007-01-01 2008-02-05  143
-2     a 2010-06-02 2013-04-05  144
-3     b 2009-04-05 2009-06-03  105
-4     b 2012-08-01 2013-02-17  153
-5     b 2019-03-19 2021-04-21  124
+  group      start        end cost score
+1     a 2007-01-01 2008-02-05  143    99
+2     a 2010-06-02 2013-04-05  144    33
+3     b 2009-04-05 2009-06-03  105    44
+4     b 2012-08-01 2013-02-17  153    22
+5     b 2019-03-19 2021-04-21  124    33
 ```
 
 The arguments are almost identical to those of `collapse_ranges`.
@@ -385,18 +385,50 @@ df
 ```
 
 ``` 
-  group      start        end cost
-1     a 2007-01-01 2008-02-05  143
-2     a 2008-02-06 2010-06-01   NA
-3     a 2010-06-02 2013-04-05  144
-4     b 2009-04-05 2009-06-03  105
-5     b 2009-06-04 2012-07-31   NA
-6     b 2012-08-01 2013-02-17  153
-7     b 2013-02-18 2019-03-18   NA
-8     b 2019-03-19 2021-04-21  124
+  group      start        end cost score
+1     a 2007-01-01 2008-02-05  143    99
+2     a 2008-02-06 2010-06-01   NA    NA
+3     a 2010-06-02 2013-04-05  144    33
+4     b 2009-04-05 2009-06-03  105    44
+5     b 2009-06-04 2012-07-31   NA    NA
+6     b 2012-08-01 2013-02-17  153    22
+7     b 2013-02-18 2019-03-18   NA    NA
+8     b 2019-03-19 2021-04-21  124    33
 ```
 
 As you can see, all the original variables are returned.
 
-The rows corresponding to added ranges will have `NA` in the columns
-that are not grouping variables (in the above case the `cost` variable).
+The rows corresponding to added ranges will by default have `NA` in the
+columns that are not grouping variables (in the above case the `cost`
+variable).
+
+You can change this behaviour by adjusting the `fill` parameter, like
+below:
+
+``` r
+df <- fill_ranges(df, 
+                  groups = "group", 
+                  start_var = "start", 
+                  end_var = "end", 
+                  fill = "cost = 0, score = Missing"
+                  )
+
+df
+```
+
+``` 
+  group      start        end cost   score
+1     a 2007-01-01 2008-02-05  143      99
+2     a 2008-02-06 2010-06-01    0 Missing
+3     a 2010-06-02 2013-04-05  144      33
+4     b 2009-04-05 2009-06-03  105      44
+5     b 2009-06-04 2012-07-31    0 Missing
+6     b 2012-08-01 2013-02-17  153      22
+7     b 2013-02-18 2019-03-18    0 Missing
+8     b 2019-03-19 2021-04-21  124      33
+```
+
+Note that this feature is somewhat experimental & currently the columns
+to be filled are - for safety reasons - automatically converted to
+`character`. Additional checks & more flexibility will be added in the
+future.
