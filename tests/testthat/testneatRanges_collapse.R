@@ -49,6 +49,40 @@ test_that("collapse_ranges functions with date formats", {
 
 )
 
+test_that("collapse_ranges functions with date formats & no groups", {
+  
+  df <- data.frame(
+    id = c(rep("1111", 3), rep("2222", 3)),
+    rating = c("A+", "AA", "AA", rep("B-", 3)),
+    start_date = c("2014-01-01", "2015-01-01", "2016-01-01",
+                   "2017-01-01", "2018-01-01", "2019-01-01"),
+    end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
+                 "2017-01-31", "2018-12-31", "2020-02-01")
+  )
+  
+  output_date <- structure(
+    list(
+      start_date = structure(c(16071, 17167, 17532), class = "Date"),
+      end_date = structure(c(16861, 17197, 18293), class = "Date")
+    ),
+    row.names = c(NA,-3L),
+    class = "data.frame"
+  )
+  
+  df_collapsed <- collapse_ranges(df, 
+                                  start_var = "start_date", 
+                                  end_var = "end_date",
+                                  max_gap = 0L,
+                                  fmt = "%Y-%m-%d",
+                                  dimension = "date"
+  )
+  
+  expect_equal(output_date, df_collapsed)
+  
+}
+
+)
+
 test_that("collapse_ranges functions with timestamps", {
   
   df_collapse_time <- data.frame(

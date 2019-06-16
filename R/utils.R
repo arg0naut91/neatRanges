@@ -10,5 +10,6 @@ globalVariables(c("gap_between",
                   "seqs",
                   "nrow",
                   "gapFlag",
-                  "st_tmp")
+                  "st_tmp",
+                  "shift_tmp")
                 )
