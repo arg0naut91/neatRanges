@@ -31,8 +31,7 @@ expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
   expdf <- copy(df)
   
   rangevars <- c(
-    substitute(start_var),
-    substitute(end_var)
+    start_var, end_var
   )
   
   expdf <- setDT(expdf)[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars][
@@ -88,8 +87,7 @@ expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
   expdf <- copy(df)
   
   rangevars <- c(
-    substitute(start_var),
-    substitute(end_var)
+    start_var, end_var
   )
   
   expdf <- setDT(expdf)[, (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = "UTC")), .SDcols = rangevars][

@@ -41,6 +41,7 @@ collapse_ranges <- function(df,
   cumidx <- "cumidx4"
   group_1stlvl <- groups
   group_by_args_2lvl <- c(groups, cumidx)
+  groupsArrange <- c(groups, start_var)
   
   rangevars <- c(
     start_var,
@@ -57,8 +58,8 @@ collapse_ranges <- function(df,
     df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
     
-    df_collapsed <- df_collapsed[order(get(groups), get(start_var)), ]
-    
+    df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
+
     df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var))), by = mget(group_1stlvl)]
     
   } else if (dimension == "timestamp") {
@@ -80,7 +81,7 @@ collapse_ranges <- function(df,
     df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
     
-    df_collapsed <- df_collapsed[order(get(groups), get(start_var)), ]
+    df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
     
     df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
     

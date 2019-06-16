@@ -20,7 +20,10 @@
 #' @export
 partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_keep = NULL, partition_by = "year") {
   
-  rangevars <- c(substitute(start_var), substitute(end_var))
+  rangevars <- c(
+    start_var, end_var
+  )
+  
   partitioned <- setDT(copy(df))[, `:=`((rangevars), 
                                         lapply(.SD, function(x) as.Date(as.character(x), format = fmt))), 
                                  .SDcols = rangevars]
