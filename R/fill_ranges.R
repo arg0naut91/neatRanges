@@ -1,6 +1,6 @@
-#' Fills the gaps between ranges (where gap is defined as more than 1 day/second of difference).
+#' Fill the gaps between ranges (where gap is defined as more than 1 day/second of difference).
 #' 
-#' Columns that are not start/end dates or grouping variables are returned with NA as values for missing ranges. 
+#' Columns that are not start/end dates or grouping variables are returned with NA as values for all missing ranges. 
 #'
 #' @param df Your data frame
 #' @param groups Grouping variables
@@ -11,7 +11,7 @@
 #' @param tz Time zone, defaults to UTC
 #' @param origin Origin for timestamp conversion, defaults to 1970-01-01
 #'
-#' @return Returns a data frame (if initial input data.table, then data.table) with missing ranges.
+#' @return Returns ordered data frame (if initial input data.table, then data.table) with added missing ranges.
 #'
 #' @examples
 #' df <- data.frame(
@@ -21,7 +21,7 @@
 #' cost = c(143, 144, 105, 153, 124)
 #' )
 #'
-#' fill_ranges(df, start_var = "start", end_var = "end", groups = c("group"))
+#' fill_ranges(df, start_var = "start", end_var = "end", groups = "group")
 #' @export
 fill_ranges <- function(df,
                         groups = NULL,

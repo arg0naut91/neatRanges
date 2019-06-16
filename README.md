@@ -1,4 +1,4 @@
-﻿neatRanges
+neatRanges
 ================
 
 [![Travis build
@@ -11,23 +11,23 @@ timestamp ranges, namely:
 
   - Collapsing,  
   - Partitioning,  
+  - Combining,  
   - Expanding,  
   - Filling the gaps between ranges.
 
-It uses `data.table` in order to speed up the operations.
+It uses `data.table` in order to speed up the operations. You can
+install it *via* `devtools::install_github("arg0naut91/neatRanges")`.
 
-You can install it *via*
-`devtools::install_github("arg0naut91/neatRanges")`.
+Below is a quick overview of all functions, followed by a detailed
+description of each one of them.
 
-However, please note that:
-
-  - Currently, `collapse_ranges`, `partition_ranges` (only for years and
-    months) and `expand_times`/`expand_dates` functions are available.
-    Additional developments coming up soon;
-
-  - Even the before-mentioned functions are in their early state, and
-    very much prone to bugs, especially when it comes to `POSIXct`
-    formats.
+| Function          | Description                                           | Supports dates   | Supports timestamps |
+| ----------------- | ----------------------------------------------------- | ---------------- | ------------------- |
+| collapse\_ranges  | Collapse consecutive ranges                           | Yes              | Yes                 |
+| partition\_ranges | Split a range into multiple ranges (by month or year) | Months and years | No                  |
+| expand\_\*        | Expand a range                                        | Yes              | Yes                 |
+| combine\_ranges   | Combine ranges from multiple tables                   | Yes              | Yes                 |
+| fill\_ranges      | Add missing ranges                                    | Yes              | Yes                 |
 
 ## collapse\_ranges
 
@@ -293,3 +293,105 @@ head(df_exp)
 5 2222      F 2019-01-01 14:00:00
 6 2222      F 2019-01-01 15:00:00
 ```
+
+## combine\_ranges
+
+This function is essentially a wrapper around `collapse_ranges` that
+allows you to combine ranges scattered around different tables into one
+table with non-redundant splits & rows.
+
+Let’s say we have the following data frames `df1`, `df2` and `df3`:
+
+``` 
+       start        end group infoScores
+1 2010-01-01 2010-08-05     a          0
+2 2012-06-01 2013-03-03     a          3
+3 2014-10-15 2015-01-01     b          2
+```
+
+``` 
+         end group      start score
+1 2012-04-05     b 2009-01-15     8
+2 2014-06-09     a 2012-07-08     2
+3 2009-02-01     b 2008-01-01     3
+```
+
+``` 
+         end group      start scoreInfo
+1 2011-04-05     a 2010-02-03         1
+2 2014-12-09     b 2014-07-08         2
+3 2009-02-01     c 2008-01-01         3
+```
+
+Note the column names: the range names (`start` and `end`) as well as
+the grouping variables (`group`) are the same across all data frames.
+This is a requirement for the function to run properly.
+
+The arguments are almost identical to those of `collapse_ranges`, except
+that at the beginning it is possible to pass as many data frames as you
+would like to combine. They need to be enumerated and not represented in
+a list or vector.
+
+For instance, we can combine the above data frames as follows:
+
+``` r
+df <- combine_ranges(df1, df2, df3, start_var = "start", end_var = "end", groups = "group")
+
+df
+```
+
+``` 
+  group      start        end
+1     a 2010-01-01 2011-04-05
+2     a 2012-06-01 2014-06-09
+3     b 2008-01-01 2012-04-05
+4     b 2014-07-08 2015-01-01
+5     c 2008-01-01 2009-02-01
+```
+
+As you have probably noticed, the output contains only the relevant
+columns: range variables & grouping variables.
+
+## fill\_ranges
+
+The function adds missing ranges to a table. It supports both `Date` and
+`POSIXct` formats; by default, it assumes the range columns are dates.
+
+``` 
+  group      start        end cost
+1     a 2007-01-01 2008-02-05  143
+2     a 2010-06-02 2013-04-05  144
+3     b 2009-04-05 2009-06-03  105
+4     b 2012-08-01 2013-02-17  153
+5     b 2019-03-19 2021-04-21  124
+```
+
+The arguments are almost identical to those of `collapse_ranges`.
+
+By `dimension` argument you indicate whether your data frame contains
+`date` or `timestamp` values (defaults to dates).
+
+The output based on the above data frame:
+
+``` r
+df <- fill_ranges(df, start_var = "start", end_var = "end", groups = "group")
+
+df
+```
+
+``` 
+  group      start        end cost
+1     a 2007-01-01 2008-02-05  143
+2     a 2008-02-06 2010-06-01   NA
+3     a 2010-06-02 2013-04-05  144
+4     b 2009-04-05 2009-06-03  105
+5     b 2009-06-04 2012-07-31   NA
+6     b 2012-08-01 2013-02-17  153
+7     b 2013-02-18 2019-03-18   NA
+8     b 2019-03-19 2021-04-21  124
+```
+
+As you can see, all the original variables are returned.
+
+The rows corresponding to added ranges will have `NA` in the columns
+that are not grouping variables (in the above case the `cost` variable).

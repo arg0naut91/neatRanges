@@ -1,6 +1,6 @@
 ###############################################
 #
-# Test script for chronshape - collapse_ranges
+# Test script for neatRanges - collapse_ranges
 #
 # Last updated on 04/04/2019
 #

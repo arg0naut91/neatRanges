@@ -1,11 +1,11 @@
 Package: neatRanges
 Type: Package
-Title: A Tool for Tidying Up Your Date/Time Ranges
+Title: A Tool for Tidying Up Date/Time Ranges
 Version: 0.1.0
 Author: Aljaz Jelenko <aljaz.jelenko@amis.net>
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
 BugReports: https://github.com/arg0naut91/neatRanges/issues
-Description: Collapse, partition, combine, fill gaps in and combine your date/time ranges.
+Description: Collapse, partition, combine, fill gaps in and expand date/time ranges.
 URL: https://github.com/arg0naut91/neatRanges
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
