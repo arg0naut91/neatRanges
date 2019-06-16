@@ -1,4 +1,4 @@
 library(testthat)
-library(chronshape)
+library(neatRanges)
 
-test_check("chronshape")
+test_check("neatRanges")

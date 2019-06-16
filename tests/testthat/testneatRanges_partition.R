@@ -1,6 +1,6 @@
 ################################################
 #
-# Test script for chronshape - partition_ranges
+# Test script for neatRanges - partition_ranges
 #
 # Last updated on 07/04/2019
 #

@@ -1,12 +1,12 @@
-Package: chronshape
+Package: neatRanges
 Type: Package
-Title: A Tool for Tidying Up your Date/Time Ranges
+Title: A Tool for Tidying Up Your Date/Time Ranges
 Version: 0.1.0
-Author: Aljaz Jelenko
+Author: Aljaz Jelenko <aljaz.jelenko@amis.net>
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
-BugReports: https://github.com/arg0naut91/chronshape/issues
-Description: Collapse, partition, expand and fill gaps in your date/time ranges.
-URL: https://github.com/arg0naut91/chronshape
+BugReports: https://github.com/arg0naut91/neatRanges/issues
+Description: Collapse, partition, combine, fill gaps in and combine your date/time ranges.
+URL: https://github.com/arg0naut91/neatRanges
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
 Imports: data.table
@@ -15,4 +15,4 @@ LazyData: true
 Suggests: testthat
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-04-13 19:22:20 UTC; aljaz_000
+Packaged: 2019-06-16 09:14:10 UTC; aljaz_000

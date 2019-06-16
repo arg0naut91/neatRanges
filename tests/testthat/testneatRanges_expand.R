@@ -1,6 +1,6 @@
 ################################################
 #
-# Test script for chronshape - expand_*
+# Test script for neatRanges - expand_*
 #
 # Last updated on 06/04/2019
 #
@@ -9,14 +9,14 @@ context("expand_dates")
 context("expand_times")
 
 test_that("expand_dates is functional", {
-  
+
   df <- data.frame(
     id = c("1111", "2222", "3333"),
     gender = c("M", "F", "F"),
     start = c("2018-01-01", "2019-01-01", "2020-01-01"),
     end = c("2018-01-05", "2019-01-07", "2020-01-08")
   )
-  
+
   output_date <-
     structure(
       list(
@@ -102,24 +102,24 @@ test_that("expand_dates is functional", {
       row.names = c(NA,-20L),
       class = "data.frame"
     )
-  
+
   df_dates <- expand_dates(df, "start", "end", "exp_seqs", vars_to_keep = c("id", "gender"))
-  
+
   expect_equal(output_date, df_dates)
-  
+
 }
 
 )
 
 test_that("expand_times is functional", {
-  
+
   df <- data.frame(
     id = c("1111", "2222", "3333"),
     gender = c("M", "F", "F"),
     start = c("2018-01-01 15:00:00", "2019-01-01 14:00:00", "2020-01-01 19:00:00"),
     end = c("2018-01-01 18:30:00", "2019-01-01 17:30:00", "2020-01-02 02:00:00")
   )
-  
+
   output_time <-
     structure(
       list(
@@ -162,11 +162,11 @@ test_that("expand_times is functional", {
       row.names = c(NA,-16L),
       class = "data.frame"
     )
-  
+
   df_times <- expand_times(df, "start", "end", vars_to_keep = c("id", "gender"))
-  
+
   expect_equal(output_time, df_times)
-  
+
 }
 
 )
