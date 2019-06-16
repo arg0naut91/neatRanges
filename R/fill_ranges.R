@@ -70,8 +70,9 @@ fill_ranges <- function(df,
   
   dfFilled <- dfFilled[, gapFlag := shift(get(end_var)) < (get(start_var) - 1L), by = mget(groups)][
     , st_tmp := get(start_var)][
-      , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var)), by = mget(groups)][
-        , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)]
+      is.na(gapFlag), gapFlag := FALSE][
+        , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var)), by = mget(groups)][
+          , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)]
   
   if (!is.null(fill)) {
     
@@ -84,11 +85,11 @@ fill_ranges <- function(df,
       , (nms) := as.list(vals)
       ]
     
-    dfFilled <- dfFilled[!is.na(get(start_var)), mget(allCols)]
+    dfFilled <- dfFilled[!(is.na(get(start_var)) | gapFlag == FALSE), mget(allCols)]
     
   } else {
     
-    dfFilled <- dfFilled[!is.na(get(start_var)), mget(colsToRetain)]
+    dfFilled <- dfFilled[!(is.na(get(start_var)) | gapFlag == FALSE), mget(colsToRetain)]
     
   }
   

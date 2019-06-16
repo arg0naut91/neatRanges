@@ -369,6 +369,9 @@ The function adds missing ranges to a table. It supports both `Date` and
 3     b 2009-04-05 2009-06-03  105    44
 4     b 2012-08-01 2013-02-17  153    22
 5     b 2019-03-19 2021-04-21  124    33
+6     c 2020-01-05 2020-01-09  105   105
+7     d 2014-01-01 2014-12-31  153   153
+8     d 2015-01-01 2016-12-31  124   124
 ```
 
 The arguments are almost identical to those of `collapse_ranges`.
@@ -385,22 +388,25 @@ df
 ```
 
 ``` 
-  group      start        end cost score
-1     a 2007-01-01 2008-02-05  143    99
-2     a 2008-02-06 2010-06-01   NA    NA
-3     a 2010-06-02 2013-04-05  144    33
-4     b 2009-04-05 2009-06-03  105    44
-5     b 2009-06-04 2012-07-31   NA    NA
-6     b 2012-08-01 2013-02-17  153    22
-7     b 2013-02-18 2019-03-18   NA    NA
-8     b 2019-03-19 2021-04-21  124    33
+   group      start        end cost score
+1      a 2007-01-01 2008-02-05  143    99
+2      a 2008-02-06 2010-06-01   NA    NA
+3      a 2010-06-02 2013-04-05  144    33
+4      b 2009-04-05 2009-06-03  105    44
+5      b 2009-06-04 2012-07-31   NA    NA
+6      b 2012-08-01 2013-02-17  153    22
+7      b 2013-02-18 2019-03-18   NA    NA
+8      b 2019-03-19 2021-04-21  124    33
+9      c 2020-01-05 2020-01-09  105   105
+10     d 2014-01-01 2014-12-31  153   153
+11     d 2015-01-01 2016-12-31  124   124
 ```
 
 As you can see, all the original variables are returned.
 
 The rows corresponding to added ranges will by default have `NA` in the
-columns that are not grouping variables (in the above case the `cost`
-variable).
+columns that are not grouping variables (in the above case `cost` &
+`score` variables).
 
 You can change this behaviour by adjusting the `fill` parameter, like
 below:
@@ -417,15 +423,18 @@ df
 ```
 
 ``` 
-  group      start        end cost   score
-1     a 2007-01-01 2008-02-05  143      99
-2     a 2008-02-06 2010-06-01    0 Missing
-3     a 2010-06-02 2013-04-05  144      33
-4     b 2009-04-05 2009-06-03  105      44
-5     b 2009-06-04 2012-07-31    0 Missing
-6     b 2012-08-01 2013-02-17  153      22
-7     b 2013-02-18 2019-03-18    0 Missing
-8     b 2019-03-19 2021-04-21  124      33
+   group      start        end cost   score
+1      a 2007-01-01 2008-02-05  143      99
+2      a 2008-02-06 2010-06-01    0 Missing
+3      a 2010-06-02 2013-04-05  144      33
+4      b 2009-04-05 2009-06-03  105      44
+5      b 2009-06-04 2012-07-31    0 Missing
+6      b 2012-08-01 2013-02-17  153      22
+7      b 2013-02-18 2019-03-18    0 Missing
+8      b 2019-03-19 2021-04-21  124      33
+9      c 2020-01-05 2020-01-09  105     105
+10     d 2014-01-01 2014-12-31  153     153
+11     d 2015-01-01 2016-12-31  124     124
 ```
 
 Note that this feature is somewhat experimental & currently the columns
