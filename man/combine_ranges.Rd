@@ -4,12 +4,12 @@
 \alias{combine_ranges}
 \title{Combines ranges from different tables into a single table.}
 \usage{
-combine_ranges(..., start_var = NULL, end_var = NULL, groups = NULL,
+combine_ranges(dfs, start_var = NULL, end_var = NULL, groups = NULL,
   dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
   origin = "1970-01-01")
 }
 \arguments{
-\item{...}{Your data frames (e.g. df1, df2, df3)}
+\item{dfs}{A list of your data frames, e.g. list(df1, df2)}
 
 \item{start_var}{Start of the range. The name should be the same across all tables}
 
@@ -46,6 +46,6 @@ df2 <- data.frame(
   score = c(8, 2, 3)
 )
 
-combine_ranges(df1, df2, groups = "group",
+combine_ranges(dfs = list(df1, df2), groups = "group",
 start_var = "start", end_var = "end")
 }

@@ -1,4 +1,4 @@
-﻿neatRanges
+neatRanges
 ================
 
 [![Travis build
@@ -333,14 +333,13 @@ order.
 
 The arguments are almost identical to those of `collapse_ranges`, except
 that at the beginning it is possible to pass as many data frames as you
-would like to combine. They need to be enumerated and not represented in
-a list or vector.
+would like to combine. They need to be combined together in a list.
 
 For instance, we can combine the above data frames as follows (we don’t
 need to specify the `dimension` as it defaults to `date`):
 
 ``` r
-df <- combine_ranges(df1, df2, df3, start_var = "start", end_var = "end", groups = "group")
+df <- combine_ranges(dfs = list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group")
 
 df
 ```

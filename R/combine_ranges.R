@@ -1,6 +1,6 @@
 #' Combines ranges from different tables into a single table.
 #'
-#' @param ... Your data frames (e.g. df1, df2, df3)
+#' @param dfs A list of your data frames, e.g. list(df1, df2)
 #' @param groups Grouping variables. The names should be the same across all tables
 #' @param start_var Start of the range. The name should be the same across all tables
 #' @param end_var End of the range. The name should be the same across all tables
@@ -26,10 +26,10 @@
 #'   score = c(8, 2, 3)
 #' )
 #'
-#' combine_ranges(df1, df2, groups = "group",
+#' combine_ranges(dfs = list(df1, df2), groups = "group",
 #' start_var = "start", end_var = "end")
 #' @export
-combine_ranges <- function(...,
+combine_ranges <- function(dfs,
                            start_var = NULL,
                            end_var = NULL,
                            groups = NULL,
@@ -37,8 +37,6 @@ combine_ranges <- function(...,
                            fmt = "%Y-%m-%d",
                            tz = "UTC",
                            origin = "1970-01-01") {
-
-  dfs <- list(...)
 
   dfs <- lapply(dfs, function(x) {
 
@@ -63,7 +61,7 @@ combine_ranges <- function(...,
                          origin = origin
                          )
 
-  if (!any(class(list(...)[[1]]) %in% "data.table")) {
+  if (!any(class(dfs[[1]]) %in% "data.table")) {
 
     return(setDF(dfs))
 

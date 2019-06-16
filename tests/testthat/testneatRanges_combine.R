@@ -47,7 +47,7 @@ test_that("combine_ranges functions with date formats", {
     class = "data.frame"
   )
   
-  df <- combine_ranges(df1, df2, df3, start_var = "start", end_var = "end", groups = "group")
+  df <- combine_ranges(list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group")
   
   expect_equal(output_date, df)
   
