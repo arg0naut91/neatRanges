@@ -2,7 +2,7 @@
 ================
 
 [![Travis build
-status](https://travis-ci.org/arg0naut91/chronshape.svg?branch=master)](https://travis-ci.org/arg0naut91/chronshape)
+status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
 [![codecov](https://codecov.io/gh/arg0naut91/chronshape/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/chronshape)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
