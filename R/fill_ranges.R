@@ -68,11 +68,23 @@ fill_ranges <- function(df,
   
   dfFilled <- copy(dfCopy)
   
-  dfFilled <- dfFilled[, gapFlag := shift(get(end_var)) < (get(start_var) - 1L), by = mget(groups)][
-    , st_tmp := get(start_var)][
-      is.na(gapFlag), gapFlag := FALSE][
-        , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var)), by = mget(groups)][
-          , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)]
+  if (!is.null(groups)) {
+    
+    dfFilled <- dfFilled[, gapFlag := shift(get(end_var)) < (get(start_var) - 1L), by = mget(groups)][
+      , st_tmp := get(start_var)][
+        is.na(gapFlag), gapFlag := FALSE][
+          , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var)), by = mget(groups)][
+            , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var)), by = mget(groups)]
+    
+  } else {
+    
+    dfFilled <- dfFilled[, gapFlag := shift(get(end_var)) < (get(start_var) - 1L)][
+      , st_tmp := get(start_var)][
+        is.na(gapFlag), gapFlag := FALSE][
+          , (start_var) := ifelse(gapFlag, shift(get(end_var)) + 1L, get(start_var))][
+            , (end_var) := ifelse(gapFlag, st_tmp - 1L, get(end_var))]
+    
+  }
   
   if (!is.null(fill)) {
     

@@ -39,7 +39,13 @@ collapse_ranges <- function(df,
   max_gap <- max_gap + 1L
   
   cumidx <- "cumidx4"
-  group_1stlvl <- groups
+  
+  if (!is.null(groups)) {
+    
+    group_1stlvl <- groups
+    
+  }
+  
   group_by_args_2lvl <- c(groups, cumidx)
   groupsArrange <- c(groups, start_var)
   
@@ -59,8 +65,16 @@ collapse_ranges <- function(df,
       , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
     
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
-
-    df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var))), by = mget(group_1stlvl)]
+    
+    if (!is.null(groups)) {
+      
+      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var))), by = mget(group_1stlvl)]
+      
+    } else {
+      
+      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var)))]
+      
+    }
     
   } else if (dimension == "timestamp") {
     
@@ -83,17 +97,38 @@ collapse_ranges <- function(df,
     
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
     
-    df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
+    if (!is.null(groups)) {
+      
+      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
+      
+    } else {
+      
+      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var)))]
+      
+    }
     
   } else { stop("The dimension argument has to be either 'date' or 'timestamp'.") }
   
-  df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead"), by = mget(group_1stlvl)][
-    is.na(max_until_now), max_until_now := lead_max, by = mget(group_1stlvl)][
-      (max_until_now + max_gap) < get(start_var), gap_between := 1, by = mget(group_1stlvl)][
-        is.na(gap_between), gap_between := 0][
-          , (cumidx) := cumsum(gap_between), by = mget(group_1stlvl)][
-            , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
-              , (cumidx) := NULL]
+  if (!is.null(groups)) {
+    
+    df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead"), by = mget(group_1stlvl)][
+      is.na(max_until_now), max_until_now := lead_max, by = mget(group_1stlvl)][
+        (max_until_now + max_gap) < get(start_var), gap_between := 1, by = mget(group_1stlvl)][
+          is.na(gap_between), gap_between := 0][
+            , (cumidx) := cumsum(gap_between), by = mget(group_1stlvl)][
+              , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
+                , (cumidx) := NULL]
+    
+  } else {
+    
+    df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead")][
+      is.na(max_until_now), max_until_now := lead_max][
+        (max_until_now + max_gap) < get(start_var), gap_between := 1][
+          is.na(gap_between), gap_between := 0][
+            , (cumidx) := cumsum(gap_between)][
+              , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
+                , (cumidx) := NULL]
+    }
   
   if (!any(class(df) %in% "data.table")) {
     

@@ -6,7 +6,7 @@ status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://
 [![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-The aim of `neatRanges` is to provide tools for working with date or
+The aim of `neatRanges` is to provide tools for working with date &
 timestamp ranges, namely:
 
   - Collapsing,  
@@ -64,7 +64,9 @@ We can do this as below. A bit of explanation of some of the arguments:
 
   - `fmt` defines the format. By default, it uses `%Y-%m-%d` for dates,
     and `%Y-%m-%d %H:%M:%OS` for timestamps. If your ranges are in
-    another format, you need to modify that accordingly.
+    another format, you need to modify that accordingly;
+
+  - `groups` argument is optional.
 
 <!-- end list -->
 
@@ -75,7 +77,8 @@ df_collapsed <- collapse_ranges(df,
                                 end_var = "end_date",
                                 max_gap = 0L,
                                 fmt = "%Y-%m-%d",
-                                dimension = "date")
+                                dimension = "date"
+                                )
 
 df_collapsed
 ```
@@ -120,7 +123,8 @@ df_collapsed <- collapse_ranges(df,
                                 end_var = "end_time", 
                                 dimension = "timestamp",
                                 tz = 'UTC',
-                                origin = '1970-01-01')
+                                origin = '1970-01-01'
+                                )
 ```
 
     Warning in collapse_ranges(df, groups = c("id", "diary"), start_var =
@@ -164,7 +168,8 @@ part_by_year <- partition_ranges(df,
                                  start_var = "start",
                                  end_var = "end",
                                  partition_by = "year",
-                                 vars_to_keep = "group")
+                                 vars_to_keep = "group"
+                                 )
 
 head(part_by_year)
 ```
@@ -187,7 +192,8 @@ part_by_month <- partition_ranges(df,
                                   start_var = "start",
                                   end_var = "end",
                                   partition_by = "month",
-                                  vars_to_keep = "group")
+                                  vars_to_keep = "group"
+                                  )
 
 head(part_by_month)
 ```
@@ -339,7 +345,11 @@ For instance, we can combine the above data frames as follows (we don’t
 need to specify the `dimension` as it defaults to `date`):
 
 ``` r
-df <- combine_ranges(dfs = list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group")
+df <- combine_ranges(dfs = list(df1, df2, df3), 
+                     start_var = "start", 
+                     end_var = "end", 
+                     groups = "group"
+                     )
 
 df
 ```
@@ -354,7 +364,8 @@ df
 ```
 
 As you have probably noticed, the output contains only the relevant
-columns: range variables & grouping variables.
+columns: range variables & grouping variables. Note that the `groups`
+argument is optional.
 
 ## fill\_ranges
 
@@ -376,12 +387,17 @@ The function adds missing ranges to a table. It supports both `Date` and
 The arguments are almost identical to those of `collapse_ranges`.
 
 By `dimension` argument you indicate whether your data frame contains
-`date` or `timestamp` values (defaults to dates).
+`date` or `timestamp` values (defaults to dates). `groups` argument is
+optional.
 
 The output based on the above data frame:
 
 ``` r
-df <- fill_ranges(df, start_var = "start", end_var = "end", groups = "group")
+df <- fill_ranges(df, 
+                  start_var = "start", 
+                  end_var = "end", 
+                  groups = "group"
+                  )
 
 df
 ```
@@ -404,8 +420,8 @@ df
 As you can see, all the original variables are returned.
 
 The rows corresponding to added ranges will by default have `NA` in the
-columns that are not grouping variables (in the above case `cost` &
-`score` variables).
+columns that are not ranges or grouping variables (in the above case
+`cost` & `score` variables).
 
 You can change this behaviour by adjusting the `fill` parameter, like
 below:
