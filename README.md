@@ -15,8 +15,10 @@ timestamp ranges, namely:
   - Expanding,  
   - Filling the gaps between ranges.
 
-It uses `data.table` in order to speed up the operations. You can
-install it *via* `devtools::install_github("arg0naut91/neatRanges")`.
+It uses `data.table` in order to speed up the operations.
+
+You can install it *via*
+`devtools::install_github("arg0naut91/neatRanges")`.
 
 Below is a quick overview of all functions, followed by a detailed
 description of each one of them.
@@ -325,14 +327,17 @@ Let’s say we have the following data frames `df1`, `df2` and `df3`:
 
 Note the column names: the range names (`start` and `end`) as well as
 the grouping variables (`group`) are the same across all data frames.
-This is a requirement for the function to run properly.
+This is a requirement for the function to run properly. However - as you
+can see from the example -, there is no need for them to be in the same
+order.
 
 The arguments are almost identical to those of `collapse_ranges`, except
 that at the beginning it is possible to pass as many data frames as you
 would like to combine. They need to be enumerated and not represented in
 a list or vector.
 
-For instance, we can combine the above data frames as follows:
+For instance, we can combine the above data frames as follows (we don’t
+need to specify the `dimension` as it defaults to `date`):
 
 ``` r
 df <- combine_ranges(df1, df2, df3, start_var = "start", end_var = "end", groups = "group")
