@@ -1,6 +1,6 @@
 Package: neatRanges
 Type: Package
-Title: A Tool for Tidying Up Date/Time Ranges
+Title: Tidy Up Date/Time Ranges
 Version: 0.1.0
 Author: Aljaz Jelenko [aut, cre]
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
@@ -15,4 +15,4 @@ LazyData: true
 Suggests: testthat
 RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2019-06-16 21:57:39 UTC; aljaz_000
+Packaged: 2019-06-17 17:30:36 UTC; aljaz_000
