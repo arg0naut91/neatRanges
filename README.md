@@ -1,6 +1,7 @@
 neatRanges
 ================
 
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/neatRanges)](https://cran.r-project.org/package=neatRanges)
 [![Travis build
 status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
 [![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
@@ -17,8 +18,7 @@ timestamp ranges, namely:
 
 It uses `data.table` in order to speed up the operations.
 
-You can install it *via*
-`devtools::install_github("arg0naut91/neatRanges")`.
+You can install it from CRAN by `install.packages('neatRanges')`.
 
 Below is a quick overview of all functions, followed by a detailed
 description of each one of them.
