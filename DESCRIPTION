@@ -1,18 +1,17 @@
 Package: neatRanges
 Type: Package
 Title: Tidy Up Date/Time Ranges
-Version: 0.1.0
-Author: Aljaz Jelenko [aut, cre]
+Version: 0.2.0
+Author: Aljaz Jelenko [aut, cre], Patrik [aut]
 Maintainer: Aljaz Jelenko <aljaz.jelenko@amis.net>
 BugReports: https://github.com/arg0naut91/neatRanges/issues
 Description: Collapse, partition, combine, fill gaps in and expand date/time ranges.
 URL: https://github.com/arg0naut91/neatRanges
-License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
-Imports: data.table
-Encoding: UTF-8
-LazyData: true
+License: MIT + file LICENSE
+Imports: data.table, Rcpp (>= 1.0.1)
+LinkingTo: Rcpp
 Suggests: testthat
 RoxygenNote: 6.1.1
-NeedsCompilation: no
-Packaged: 2019-06-17 17:30:36 UTC; aljaz_000
+NeedsCompilation: yes
+Packaged: 2019-07-27 19:23:28 UTC; aljaz_000

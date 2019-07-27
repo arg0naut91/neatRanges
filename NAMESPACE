@@ -1,3 +1,5 @@
+useDynLib(neatRanges, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
 export(collapse_ranges, expand_times, expand_dates, partition_ranges, combine_ranges, fill_ranges)
 import(data.table)
 importFrom("stats", "setNames")
