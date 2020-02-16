@@ -4,9 +4,16 @@
 \alias{expand_times}
 \title{Expand timestamp ranges.}
 \usage{
-expand_times(df, start_var, end_var, name = "Expanded",
-  fmt = "\%Y-\%m-\%d \%H:\%M:\%OS", vars_to_keep = NULL,
-  unit = "hour", tz = "UTC")
+expand_times(
+  df,
+  start_var,
+  end_var,
+  name = "Expanded",
+  fmt = "\%Y-\%m-\%d \%H:\%M:\%OS",
+  vars_to_keep = NULL,
+  unit = "hour",
+  tz = "UTC"
+)
 }
 \arguments{
 \item{df}{Data frame (can also be a data.table or a tibble)}

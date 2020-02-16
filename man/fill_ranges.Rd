@@ -4,9 +4,17 @@
 \alias{fill_ranges}
 \title{Fill the gaps between ranges.}
 \usage{
-fill_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
-  fill = NULL, dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
-  origin = "1970-01-01")
+fill_ranges(
+  df,
+  groups = NULL,
+  start_var = NULL,
+  end_var = NULL,
+  fill = NULL,
+  dimension = "date",
+  fmt = "\%Y-\%m-\%d",
+  tz = "UTC",
+  origin = "1970-01-01"
+)
 }
 \arguments{
 \item{df}{Your data frame}

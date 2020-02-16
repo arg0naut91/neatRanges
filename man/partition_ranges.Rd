@@ -4,8 +4,14 @@
 \alias{partition_ranges}
 \title{Split ranges into multiple records}
 \usage{
-partition_ranges(df, start_var, end_var, fmt = "\%Y-\%m-\%d",
-  vars_to_keep = NULL, partition_by = "year")
+partition_ranges(
+  df,
+  start_var,
+  end_var,
+  fmt = "\%Y-\%m-\%d",
+  vars_to_keep = NULL,
+  partition_by = "year"
+)
 }
 \arguments{
 \item{df}{Your data frame (can also be a data.table or a tibble)}
