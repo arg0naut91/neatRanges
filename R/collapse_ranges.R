@@ -35,92 +35,52 @@ collapse_ranges <- function(df,
                             fmt = "%Y-%m-%d",
                             tz = "UTC",
                             origin = "1970-01-01") {
-  
-  max_gap <- max_gap + 1L
-  
-  cumidx <- "cumidx4"
-  
-  if (!is.null(groups)) {
-    
-    group_1stlvl <- groups
-    
-  }
-  
-  group_by_args_2lvl <- c(groups, cumidx)
+
   groupsArrange <- c(groups, start_var)
-  
+
   rangevars <- c(
     start_var,
     end_var
   )
-  
+
   df_collapsed <- copy(df)
   df_collapsed <- setDT(df_collapsed)
-  
+
   if (dimension == "date") {
-    
-    calc_cummax_Date <- function(x) (setattr(cummax(unclass(x)), "class", c("Date", "IDate")))
-    
+
+    if (is.factor(df_collapsed[[start_var]])) {
+
     df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
-    
+
+    }
+
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
-    
-    if (!is.null(groups)) {
-      
-      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var))), by = mget(group_1stlvl)]
-      
-    } else {
-      
-      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Date(get(end_var)))]
-      
-    }
-    
+
+
   } else if (dimension == "timestamp") {
-    
+
     if (fmt == "%Y-%m-%d") {
-      
+
       warning("Dimension 'timestamp' selected but format unchanged. Will try to convert to '%Y-%m-%d %H:%M:%OS' ..")
-      
+
       fmt <- "%Y-%m-%d %H:%M:%OS"
-      
+
     }
-    
-    calc_cummax_Time <- function(x) {
-      
-      x <- as.POSIXct(cummax(as.numeric(x)), tz = tz, origin = origin)
-      
-    }
-    
+
     df_collapsed <- df_collapsed[
       , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
-    
+
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
-    
-    if (!is.null(groups)) {
-      
-      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var))), by = mget(group_1stlvl)]
-      
-    } else {
-      
-      df_collapsed <- df_collapsed[, max_until_now := shift(calc_cummax_Time(get(end_var)))]
-      
-    }
-    
+
   } else { stop("The dimension argument has to be either 'date' or 'timestamp'.") }
-  
+
   if (!is.null(groups)) {
-    
-    df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead"), by = mget(group_1stlvl)][
-      is.na(max_until_now), max_until_now := lead_max, by = mget(group_1stlvl)][
-        (max_until_now + max_gap) < get(start_var), gap_between := 1, by = mget(group_1stlvl)][
-          is.na(gap_between), gap_between := 0][
-            , (cumidx) := cumsum(gap_between), by = mget(group_1stlvl)][
-              , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
-                , (cumidx) := NULL]
-    
+
+    df_collapsed <- df_collapsed[, subsetAndUpdate(From = get(start_var), To = get(end_var), maxDiff = max_gap), by = mget(groups)]
+
   } else {
-    
+
     df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead")][
       is.na(max_until_now), max_until_now := lead_max][
         (max_until_now + max_gap) < get(start_var), gap_between := 1][
@@ -129,15 +89,15 @@ collapse_ranges <- function(df,
               , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
                 , (cumidx) := NULL]
     }
-  
+
   if (!any(class(df) %in% "data.table")) {
-    
+
     return(setDF(df_collapsed))
-    
+
   } else {
-    
+
     return(df_collapsed)
-    
+
   }
-  
+
 }

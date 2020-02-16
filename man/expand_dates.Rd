@@ -4,8 +4,15 @@
 \alias{expand_dates}
 \title{Expand date ranges.}
 \usage{
-expand_dates(df, start_var, end_var, name = "Expanded",
-  fmt = "\%Y-\%m-\%d", vars_to_keep = NULL, unit = "day")
+expand_dates(
+  df,
+  start_var,
+  end_var,
+  name = "Expanded",
+  fmt = "\%Y-\%m-\%d",
+  vars_to_keep = NULL,
+  unit = "day"
+)
 }
 \arguments{
 \item{df}{Data frame (can also be a data.table or a tibble)}
