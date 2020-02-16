@@ -5,26 +5,14 @@
 
 using namespace Rcpp;
 
-// subsetAndUpdate
-List subsetAndUpdate(DateVector From, DateVector To, int maxDiff);
-RcppExport SEXP _neatRanges_subsetAndUpdate(SEXP FromSEXP, SEXP ToSEXP, SEXP maxDiffSEXP) {
+// BezRcpp
+DataFrame BezRcpp(DataFrame dtable);
+RcppExport SEXP _neatRanges_BezRcpp(SEXP dtableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< DateVector >::type From(FromSEXP);
-    Rcpp::traits::input_parameter< DateVector >::type To(ToSEXP);
-    Rcpp::traits::input_parameter< int >::type maxDiff(maxDiffSEXP);
-    rcpp_result_gen = Rcpp::wrap(subsetAndUpdate(From, To, maxDiff));
+    Rcpp::traits::input_parameter< DataFrame >::type dtable(dtableSEXP);
+    rcpp_result_gen = Rcpp::wrap(BezRcpp(dtable));
     return rcpp_result_gen;
 END_RCPP
-}
-
-static const R_CallMethodDef CallEntries[] = {
-    {"_neatRanges_subsetAndUpdate", (DL_FUNC) &_neatRanges_subsetAndUpdate, 3},
-    {NULL, NULL, 0}
-};
-
-RcppExport void R_init_neatRanges(DllInfo *dll) {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-    R_useDynamicSymbols(dll, FALSE);
 }

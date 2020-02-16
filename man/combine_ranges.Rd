@@ -4,16 +4,9 @@
 \alias{combine_ranges}
 \title{Combines ranges from different tables into a single table.}
 \usage{
-combine_ranges(
-  dfs,
-  start_var = NULL,
-  end_var = NULL,
-  groups = NULL,
-  dimension = "date",
-  fmt = "\%Y-\%m-\%d",
-  tz = "UTC",
-  origin = "1970-01-01"
-)
+combine_ranges(dfs, start_var = NULL, end_var = NULL, groups = NULL,
+  dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
+  origin = "1970-01-01")
 }
 \arguments{
 \item{dfs}{A list of your data frames, e.g. list(df1, df2)}
