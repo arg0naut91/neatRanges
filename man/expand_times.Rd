@@ -47,7 +47,7 @@ start = c("2018-01-01 15:00:00", "2019-01-01 14:00:00", "2020-01-01 19:00:00"),
 end = c("2018-01-01 18:30:00", "2019-01-01 17:30:00", "2020-01-02 02:00:00")
 )
 
-expand_times(df, start_var = "start", end_var = "end", 
+expand_times(df, start_var = "start", end_var = "end",
 vars_to_keep = c("id", "gender"), unit = "hour")
 
 }
