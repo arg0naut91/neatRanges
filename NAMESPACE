@@ -1,4 +1,4 @@
-export(collapse_ranges, expand_times, expand_dates, partition_ranges, combine_ranges, fill_ranges)
+export(collapse_ranges, expand_times, expand_dates, partition_ranges, combine_ranges, fill_ranges, updateAndSubset, updateAndSubsetTime)
 import(data.table)
 importFrom("stats", "setNames")
 importFrom(Rcpp, evalCpp)
