@@ -8,6 +8,9 @@ warnings_are_errors: true
 os:
   - linux
   - osx
+  
+env:
+  - _R_CHECK_SYSTEM_CLOCK_=0
 
 r_packages:
   - covr
