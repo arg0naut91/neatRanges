@@ -5,22 +5,36 @@
 
 using namespace Rcpp;
 
-// subsetAndUpdate
-List subsetAndUpdate(DateVector From, DateVector To, int maxDiff);
-RcppExport SEXP _neatRanges_subsetAndUpdate(SEXP FromSEXP, SEXP ToSEXP, SEXP maxDiffSEXP) {
+// updateAndSubset
+List updateAndSubset(DateVector From, DateVector To, int max_gap);
+RcppExport SEXP _neatRanges_updateAndSubset(SEXP FromSEXP, SEXP ToSEXP, SEXP max_gapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type From(FromSEXP);
     Rcpp::traits::input_parameter< DateVector >::type To(ToSEXP);
-    Rcpp::traits::input_parameter< int >::type maxDiff(maxDiffSEXP);
-    rcpp_result_gen = Rcpp::wrap(subsetAndUpdate(From, To, maxDiff));
+    Rcpp::traits::input_parameter< int >::type max_gap(max_gapSEXP);
+    rcpp_result_gen = Rcpp::wrap(updateAndSubset(From, To, max_gap));
+    return rcpp_result_gen;
+END_RCPP
+}
+// updateAndSubsetTime
+List updateAndSubsetTime(DatetimeVector From, DatetimeVector To, int max_gap);
+RcppExport SEXP _neatRanges_updateAndSubsetTime(SEXP FromSEXP, SEXP ToSEXP, SEXP max_gapSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DatetimeVector >::type From(FromSEXP);
+    Rcpp::traits::input_parameter< DatetimeVector >::type To(ToSEXP);
+    Rcpp::traits::input_parameter< int >::type max_gap(max_gapSEXP);
+    rcpp_result_gen = Rcpp::wrap(updateAndSubsetTime(From, To, max_gap));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_neatRanges_subsetAndUpdate", (DL_FUNC) &_neatRanges_subsetAndUpdate, 3},
+    {"_neatRanges_updateAndSubset", (DL_FUNC) &_neatRanges_updateAndSubset, 3},
+    {"_neatRanges_updateAndSubsetTime", (DL_FUNC) &_neatRanges_updateAndSubsetTime, 3},
     {NULL, NULL, 0}
 };
 

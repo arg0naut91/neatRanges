@@ -44,51 +44,68 @@ collapse_ranges <- function(df,
   )
 
   df_collapsed <- copy(df)
-  df_collapsed <- setDT(df_collapsed)
+
+  if (!any(class(df_collapsed) %in% "data.table")) setDT(df_collapsed)
 
   if (dimension == "date") {
 
-    if (is.factor(df_collapsed[[start_var]])) {
+    if (is.factor(df_collapsed[[start_var]]) | is.character(df_collapsed[[start_var]])) {
 
-    df_collapsed <- df_collapsed[
-      , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+      df_collapsed <- df_collapsed[
+        , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
 
     }
 
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
 
+    if (!is.null(groups)) {
+
+      df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), get(end_var), max_gap), by = mget(groups)]
+
+      setnames(df_collapsed, c(groups, "From_out", "To_out"), c(groups, start_var, end_var))
+
+    } else {
+
+      df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), get(end_var), max_gap)]
+
+      setnames(df_collapsed, c("From_out", "To_out"), c(start_var, end_var))
+
+    }
 
   } else if (dimension == "timestamp") {
 
-    if (fmt == "%Y-%m-%d") {
+    if (is.factor(df_collapsed[[start_var]]) | is.character(df_collapsed[[start_var]])) {
 
-      warning("Dimension 'timestamp' selected but format unchanged. Will try to convert to '%Y-%m-%d %H:%M:%OS' ..")
+      if (fmt == "%Y-%m-%d") {
 
-      fmt <- "%Y-%m-%d %H:%M:%OS"
+        warning("Dimension 'timestamp' selected but format unchanged. Will try to convert to '%Y-%m-%d %H:%M:%OS' ..")
+
+        fmt <- "%Y-%m-%d %H:%M:%OS"
+
+      }
+
+      df_collapsed <- df_collapsed[
+        , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
 
     }
-
-    df_collapsed <- df_collapsed[
-      , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
 
     df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
 
-  } else { stop("The dimension argument has to be either 'date' or 'timestamp'.") }
+    if (!is.null(groups)) {
 
-  if (!is.null(groups)) {
+      df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), get(end_var), max_gap), by = mget(groups)]
 
-    df_collapsed <- df_collapsed[, subsetAndUpdate(From = get(start_var), To = get(end_var), maxDiff = max_gap), by = mget(groups)]
+      setnames(df_collapsed, c(groups, "From_out", "To_out"), c(groups, start_var, end_var))
 
-  } else {
+    } else {
 
-    df_collapsed <- df_collapsed[, lead_max := shift(max_until_now, type = "lead")][
-      is.na(max_until_now), max_until_now := lead_max][
-        (max_until_now + max_gap) < get(start_var), gap_between := 1][
-          is.na(gap_between), gap_between := 0][
-            , (cumidx) := cumsum(gap_between)][
-              , setNames(list(min(get(start_var)), max(get(end_var))), rangevars), by = mget(group_by_args_2lvl)][
-                , (cumidx) := NULL]
+      df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), get(end_var), max_gap)]
+
+      setnames(df_collapsed, c("From_out", "To_out"), c(start_var, end_var))
+
     }
+
+  } else { stop("The dimension argument has to be either 'date' or 'timestamp'.") }
 
   if (!any(class(df) %in% "data.table")) {
 

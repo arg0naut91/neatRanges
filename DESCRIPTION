@@ -13,4 +13,5 @@ Imports: data.table, Rcpp (>= 1.0.3)
 LinkingTo: Rcpp
 Suggests: 
     testthat
+Encoding: UTF-8
 RoxygenNote: 7.0.2

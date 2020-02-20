@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List updateAndSubset(DateVector From, DateVector To, int max_gap) {
+List updateAndSubsetTime(DatetimeVector From, DatetimeVector To, int max_gap) {
 
   LogicalVector idx(From.size(), TRUE);
 
