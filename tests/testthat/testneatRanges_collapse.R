@@ -8,7 +8,7 @@
 context("collapse_ranges")
 
 test_that("collapse_ranges functions with date formats", {
-  
+
   df_collapse <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
     rating = c("A+", "AA", "AA", rep("B-", 3)),
@@ -17,7 +17,7 @@ test_that("collapse_ranges functions with date formats", {
     end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
                  "2017-01-31", "2018-12-31", "2020-02-01")
   )
-  
+
   output_date <- structure(
     list(
       id = structure(
@@ -40,17 +40,17 @@ test_that("collapse_ranges functions with date formats", {
     row.names = c(NA,-4L),
     class = "data.frame"
   )
-  
+
   df <- collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date")
-  
+
   expect_equal(output_date, df)
-  
+
 }
 
 )
 
 test_that("collapse_ranges functions with date formats & no groups", {
-  
+
   df <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
     rating = c("A+", "AA", "AA", rep("B-", 3)),
@@ -59,7 +59,7 @@ test_that("collapse_ranges functions with date formats & no groups", {
     end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
                  "2017-01-31", "2018-12-31", "2020-02-01")
   )
-  
+
   output_date <- structure(
     list(
       start_date = structure(c(16071, 17167, 17532), class = "Date"),
@@ -68,23 +68,23 @@ test_that("collapse_ranges functions with date formats & no groups", {
     row.names = c(NA,-3L),
     class = "data.frame"
   )
-  
-  df_collapsed <- collapse_ranges(df, 
-                                  start_var = "start_date", 
+
+  df_collapsed <- collapse_ranges(df,
+                                  start_var = "start_date",
                                   end_var = "end_date",
                                   max_gap = 0L,
                                   fmt = "%Y-%m-%d",
                                   dimension = "date"
   )
-  
+
   expect_equal(output_date, df_collapsed)
-  
+
 }
 
 )
 
 test_that("collapse_ranges functions with timestamps", {
-  
+
   df_collapse_time <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
     diary = c("reading", "watching TV", "watching TV", rep("sleeping", 3)),
@@ -93,7 +93,7 @@ test_that("collapse_ranges functions with timestamps", {
     end_time = c("2014-01-01 14:59:59", "2014-01-01 16:29:59", "2014-01-01 19:00:00",
                  "2015-01-01 15:59:59", "2015-01-01 18:59:59", "2015-01-01 21:00:00")
   )
-  
+
   output_time <-
     structure(
       list(
@@ -124,11 +124,11 @@ test_that("collapse_ranges functions with timestamps", {
       row.names = c(NA,-4L),
       class = "data.frame"
     )
-  
+
   df <- collapse_ranges(df_collapse_time, c("id", "diary"), "start_time", "end_time", dimension = "timestamp")
-  
+
   expect_equal(output_time, df)
-  
+
 }
 
 )

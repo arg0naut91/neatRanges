@@ -11,46 +11,54 @@
 #' @return Returns a full data frame with expanded sequences in a column, e.g. by day or month.
 #'
 #' @examples
-#' 
+#'
 #' df <- data.frame(
 #' id = c("1111", "2222", "3333"),
 #' gender = c("M", "F", "F"),
 #' start = c("2018-01-01", "2019-01-01", "2020-01-01"),
 #' end = c("2018-01-05", "2019-01-07", "2020-01-08")
 #' )
-#' 
-#' expand_dates(df, start_var = "start", end_var = "end", 
+#'
+#' expand_dates(df, start_var = "start", end_var = "end",
 #' vars_to_keep = c("id", "gender"), unit = "day")
-#' 
+#'
 #' @export
 expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m-%d", vars_to_keep = NULL, unit = "day") {
-  
+
   rown <- "rn"
   grouping <- c(vars_to_keep, rown)
-  
+
   expdf <- copy(df)
-  
+
+  if (!any(class(expdf) %in% "data.table")) setDT(expdf)
+
   rangevars <- c(
     start_var, end_var
   )
-  
-  expdf <- setDT(expdf)[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars][
+
+  if (is.factor(expdf[[start_var]]) | is.character(expdf[[start_var]])) {
+
+    expdf <- expdf[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+
+  }
+
+  expdf <- expdf[
     , rn := seq(.N)][
       , .(Expanded = seq.Date(get(start_var), get(end_var), by = unit)), by = mget(grouping)][
         , rn := NULL]
-  
+
   setnames(expdf, "Expanded", name)
-  
+
   if (!any(class(df) %in% "data.table")) {
-    
+
     return(setDF(expdf))
-    
+
   } else {
-    
+
     return(expdf)
-    
+
   }
-  
+
 }
 
 #' Expand timestamp ranges.
@@ -67,44 +75,44 @@ expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
 #' @return Returns a full data frame with expanded sequences in a column, e.g. by day or month.
 #'
 #' @examples
-#' 
+#'
 #' df <- data.frame(
 #' id = c("1111", "2222", "3333"),
 #' gender = c("M", "F", "F"),
 #' start = c("2018-01-01 15:00:00", "2019-01-01 14:00:00", "2020-01-01 19:00:00"),
 #' end = c("2018-01-01 18:30:00", "2019-01-01 17:30:00", "2020-01-02 02:00:00")
 #' )
-#' 
-#' expand_times(df, start_var = "start", end_var = "end", 
+#'
+#' expand_times(df, start_var = "start", end_var = "end",
 #' vars_to_keep = c("id", "gender"), unit = "hour")
-#' 
+#'
 #' @export
 expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m-%d %H:%M:%OS", vars_to_keep = NULL, unit = "hour", tz = "UTC") {
-  
+
   rown <- "rn"
   grouping <- c(vars_to_keep, rown)
-  
+
   expdf <- copy(df)
-  
+
   rangevars <- c(
     start_var, end_var
   )
-  
+
   expdf <- setDT(expdf)[, (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = "UTC")), .SDcols = rangevars][
     , rn := seq(.N)][
       , .(Expanded = seq.POSIXt(get(start_var), get(end_var), by = unit)), by = mget(grouping)][
         , rn := NULL]
-  
+
   setnames(expdf, "Expanded", name)
-  
+
   if (!any(class(df) %in% "data.table")) {
-    
+
     return(setDF(expdf))
-    
+
   } else {
-    
+
     return(expdf)
-    
+
   }
-  
+
 }
