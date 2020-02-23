@@ -43,18 +43,29 @@ combine_ranges <- function(dfs,
                            fmt = "%Y-%m-%d",
                            tz = "UTC",
                            origin = "1970-01-01") {
-
+  
+  chckClass <- any(sapply(dfs, function(x) class(x) %in% 'data.table'))
+  
   dfs <- lapply(dfs, function(x) {
-
-    x <- x[, colnames(x) %in% c(start_var, end_var, groups, startVars, endVars)]
-    x <- x[, c(groups, start_var, end_var, startVars, endVars)]
-
+    
+    if (!chckClass) {
+      
+      x <- x[, c(groups, start_var, end_var, startVars, endVars)]
+      
+    } else {
+      
+      colsToKeep <- c(groups, start_var, end_var, startVars, endVars)
+      
+      x <- x[, ..colsToKeep]
+      
+    }
+    
     return(x)
-
+    
   }
-
+  
   )
-
+  
   dfs <- data.table::rbindlist(dfs)
 
   dfs <- collapse_ranges(dfs,
@@ -70,7 +81,7 @@ combine_ranges <- function(dfs,
                          origin = origin
                          )
 
-  if (!any(class(dfs[[1]]) %in% "data.table")) {
+  if (!chckClass) {
 
     return(setDF(dfs))
 

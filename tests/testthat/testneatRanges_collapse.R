@@ -658,6 +658,45 @@ test_that("collapse_ranges functions with times, no groups and end vars only", {
   
 })
 
+test_that("collapse_ranges functions with times only", {
+  
+  df_collapse_time <- data.frame(
+    id = c(rep("1111", 3), rep("2222", 3)),
+    diary = c("reading", "watching TV", "watching TV", rep("sleeping", 3)),
+    start_time = c("2014-01-01 14:00:00", "2014-01-01 15:00:00", "2014-01-01 16:30:00",
+                   "2015-01-01 15:00:00", "2015-01-01 17:00:00", "2015-01-01 19:00:00"),
+    end_time = c("2014-01-01 14:59:59", "2014-01-01 16:29:59", "2014-01-01 19:00:00",
+                 "2015-01-01 15:59:59", "2015-01-01 18:59:59", "2015-01-01 21:00:00"),
+    startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
+    startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
+    endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+  )
+  
+  output_vars <- structure(
+    list(
+      start_time = structure(
+        c(1388584800, 1420124400,
+          1420131600),
+        class = c("POSIXct", "POSIXt"),
+        tzone = "UTC"
+      ),
+      end_time = structure(
+        c(1388602800, 1420127999, 1420146000),
+        class = c("POSIXct", "POSIXt"),
+        tzone = "UTC"
+      )
+    ),
+    row.names = c(NA,-3L),
+    class = "data.frame"
+  )
+  
+  df <- collapse_ranges(df_collapse_time, start_var = "start_time", end_var = "end_time", dimension = 'timestamp')
+  
+  expect_equal(df, output_vars)
+  
+})
+
 test_that("error when wrong dimension", {
   
   df_collapse_time <- data.frame(
