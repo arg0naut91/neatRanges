@@ -9,5 +9,6 @@ globalVariables(c("rn",
                   "st_tmp",
                   "shift_tmp",
                   "startObjects",
-                  "endObjects")
+                  "endObjects",
+                  "..rangevars")
                 )
