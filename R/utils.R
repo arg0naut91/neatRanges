@@ -7,5 +7,7 @@ globalVariables(c("rn",
                   "nrow",
                   "gapFlag",
                   "st_tmp",
-                  "shift_tmp")
+                  "shift_tmp",
+                  "startObjects",
+                  "endObjects")
                 )
