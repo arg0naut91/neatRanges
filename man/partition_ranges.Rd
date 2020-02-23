@@ -4,8 +4,14 @@
 \alias{partition_ranges}
 \title{Split ranges into multiple records}
 \usage{
-partition_ranges(df, start_var, end_var, fmt = "\%Y-\%m-\%d",
-  vars_to_keep = NULL, partition_by = "year")
+partition_ranges(
+  df,
+  start_var,
+  end_var,
+  fmt = "\%Y-\%m-\%d",
+  vars_to_keep = NULL,
+  partition_by = "year"
+)
 }
 \arguments{
 \item{df}{Your data frame (can also be a data.table or a tibble)}
@@ -31,7 +37,7 @@ Split ranges into multiple records
 df <- data.frame(group = c("a", "a", "b", "b", "c"),
 start = c("2017-05-01", "2019-04-03", "2011-03-03", "2014-05-07", "2017-02-01"),
 end = c("2018-09-01", "2020-04-03", "2012-05-03", "2016-04-02", "2017-04-05")
-) 
+)
 
 partition_ranges(df, "start", "end", partition_by = "month")
 }

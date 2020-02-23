@@ -4,8 +4,15 @@
 \alias{expand_dates}
 \title{Expand date ranges.}
 \usage{
-expand_dates(df, start_var, end_var, name = "Expanded",
-  fmt = "\%Y-\%m-\%d", vars_to_keep = NULL, unit = "day")
+expand_dates(
+  df,
+  start_var,
+  end_var,
+  name = "Expanded",
+  fmt = "\%Y-\%m-\%d",
+  vars_to_keep = NULL,
+  unit = "day"
+)
 }
 \arguments{
 \item{df}{Data frame (can also be a data.table or a tibble)}
@@ -37,7 +44,7 @@ start = c("2018-01-01", "2019-01-01", "2020-01-01"),
 end = c("2018-01-05", "2019-01-07", "2020-01-08")
 )
 
-expand_dates(df, start_var = "start", end_var = "end", 
+expand_dates(df, start_var = "start", end_var = "end",
 vars_to_keep = c("id", "gender"), unit = "day")
 
 }

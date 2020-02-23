@@ -4,9 +4,19 @@
 \alias{collapse_ranges}
 \title{Collapses the consecutive date or timestamp ranges into one record.}
 \usage{
-collapse_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
-  dimension = "date", max_gap = 0L, fmt = "\%Y-\%m-\%d",
-  tz = "UTC", origin = "1970-01-01")
+collapse_ranges(
+  df,
+  groups = NULL,
+  start_var = NULL,
+  end_var = NULL,
+  startVars = NULL,
+  endVars = NULL,
+  dimension = "date",
+  max_gap = 0L,
+  fmt = "\%Y-\%m-\%d",
+  tz = "UTC",
+  origin = "1970-01-01"
+)
 }
 \arguments{
 \item{df}{Your data frame}
@@ -16,6 +26,10 @@ collapse_ranges(df, groups = NULL, start_var = NULL, end_var = NULL,
 \item{start_var}{Start of the range}
 
 \item{end_var}{End of the range}
+
+\item{startVars}{Attributes linked to start of the range which should be kept (converted to character type by default)}
+
+\item{endVars}{Attributes linked to end of the range which should be kept (converted to character type by default)}
 
 \item{dimension}{Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'}
 

@@ -1,9 +1,12 @@
 #' Combines ranges from different tables into a single table.
 #'
 #' @param dfs A list of your data frames, e.g. list(df1, df2)
-#' @param groups Grouping variables. The names should be the same across all tables
-#' @param start_var Start of the range. The name should be the same across all tables
-#' @param end_var End of the range. The name should be the same across all tables
+#' @param groups Grouping variables
+#' @param start_var Start of the range
+#' @param end_var End of the range
+#' @param startVars Attributes linked to start of the range which should be kept (converted to character type by default)
+#' @param endVars Attributes linked to end of the range which should be kept (converted to character type by default)
+#' @param max_gap Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between
 #' @param dimension Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'
 #' @param fmt The format of your date or timestamp field, defaults to YMD
 #' @param tz Time zone, defaults to UTC
@@ -30,38 +33,55 @@
 #' start_var = "start", end_var = "end")
 #' @export
 combine_ranges <- function(dfs,
+                           groups = NULL,
                            start_var = NULL,
                            end_var = NULL,
-                           groups = NULL,
+                           startVars = NULL,
+                           endVars = NULL,
                            dimension = "date",
+                           max_gap = 0L,
                            fmt = "%Y-%m-%d",
                            tz = "UTC",
                            origin = "1970-01-01") {
-
+  
+  chckClass <- any(sapply(dfs, function(x) class(x) %in% 'data.table'))
+  
   dfs <- lapply(dfs, function(x) {
-
-    x <- x[, colnames(x) %in% c(start_var, end_var, groups)]
-    x <- x[, c(start_var, end_var, groups)]
-
+    
+    if (!chckClass) {
+      
+      x <- x[, c(groups, start_var, end_var, startVars, endVars)]
+      
+    } else {
+      
+      colsToKeep <- c(groups, start_var, end_var, startVars, endVars)
+      
+      x <- x[, ..colsToKeep]
+      
+    }
+    
     return(x)
-
+    
   }
-
+  
   )
-
+  
   dfs <- data.table::rbindlist(dfs)
 
   dfs <- collapse_ranges(dfs,
                          start_var = start_var,
                          end_var = end_var,
                          groups = groups,
+                         startVars = startVars,
+                         endVars = endVars,
+                         max_gap = max_gap,
                          dimension = dimension,
                          fmt = fmt,
                          tz = tz,
                          origin = origin
                          )
 
-  if (!any(class(dfs[[1]]) %in% "data.table")) {
+  if (!chckClass) {
 
     return(setDF(dfs))
 

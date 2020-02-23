@@ -1,8 +1,4 @@
-globalVariables(c("gap_between",
-                  "lead_max",
-                  "max_until_now",
-                  "Expanded",
-                  "rn",
+globalVariables(c("rn",
                   ".",
                   "rl",
                   "st_seq",
@@ -11,5 +7,9 @@ globalVariables(c("gap_between",
                   "nrow",
                   "gapFlag",
                   "st_tmp",
-                  "shift_tmp")
+                  "shift_tmp",
+                  "startObjects",
+                  "endObjects",
+                  "..rangevars",
+                  "..colsToKeep")
                 )

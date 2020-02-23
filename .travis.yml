@@ -1,19 +1,18 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-sudo: false
-#cache: packages
+language: r
+cache: packages
 warnings_are_errors: true
 
 os:
   - linux
   - osx
+  
+env:
+  - _R_CHECK_SYSTEM_CLOCK_=0
 
 r_packages:
   - covr
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
-
-before_install:
-  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm; fi

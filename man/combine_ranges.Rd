@@ -4,20 +4,36 @@
 \alias{combine_ranges}
 \title{Combines ranges from different tables into a single table.}
 \usage{
-combine_ranges(dfs, start_var = NULL, end_var = NULL, groups = NULL,
-  dimension = "date", fmt = "\%Y-\%m-\%d", tz = "UTC",
-  origin = "1970-01-01")
+combine_ranges(
+  dfs,
+  groups = NULL,
+  start_var = NULL,
+  end_var = NULL,
+  startVars = NULL,
+  endVars = NULL,
+  dimension = "date",
+  max_gap = 0L,
+  fmt = "\%Y-\%m-\%d",
+  tz = "UTC",
+  origin = "1970-01-01"
+)
 }
 \arguments{
 \item{dfs}{A list of your data frames, e.g. list(df1, df2)}
 
-\item{start_var}{Start of the range. The name should be the same across all tables}
+\item{groups}{Grouping variables}
 
-\item{end_var}{End of the range. The name should be the same across all tables}
+\item{start_var}{Start of the range}
 
-\item{groups}{Grouping variables. The names should be the same across all tables}
+\item{end_var}{End of the range}
+
+\item{startVars}{Attributes linked to start of the range which should be kept (converted to character type by default)}
+
+\item{endVars}{Attributes linked to end of the range which should be kept (converted to character type by default)}
 
 \item{dimension}{Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'}
+
+\item{max_gap}{Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between}
 
 \item{fmt}{The format of your date or timestamp field, defaults to YMD}
 
