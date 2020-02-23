@@ -61,8 +61,8 @@ environment:
     RTOOLS_VERSION: 32
     DOWNLOAD_FILE_METHOD: wininet
 
-  matrix:
-    fast_finish: true
+matrix:
+  fast_finish: true
 
 build_script:
   - travis-tool.sh install_deps
