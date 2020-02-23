@@ -2,6 +2,8 @@ neatRanges
 ================
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/neatRanges)](https://cran.r-project.org/package=neatRanges)
+[![Development
+version](https://img.shields.io/badge/devel%20version-0.1.1-brightgreen.svg)](https://github.com/arg0naut91/neatRanges)
 [![Travis build
 status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
 [![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
@@ -16,7 +18,10 @@ timestamp ranges, namely:
   - Expanding,  
   - Filling the gaps between ranges.
 
-It uses `data.table` in order to speed up the operations.
+It primarily uses `data.table` in order to speed up the operations. One
+of the functions - `collapse_ranges` - also uses `Rcpp`, thanks to the
+idea from
+[Patrikios/customerRelationship](https://github.com/Patrikios/customerRelationship).
 
 You can install it from CRAN by `install.packages('neatRanges')`.
 
@@ -43,13 +48,13 @@ Now you can see that some of them are actually consecutive. Instead of 6
 rows, we’d therefore like to get only 4.
 
 ``` 
-    id rating start_date   end_date
-1 1111     A+ 2014-01-01 2014-12-31
-2 1111     AA 2015-01-01 2015-12-31
-3 1111     AA 2016-01-01 2016-03-01
-4 2222     B- 2017-01-01 2017-01-31
-5 2222     B- 2018-01-01 2018-12-31
-6 2222     B- 2019-01-01 2020-02-01
+    id rating start_date   end_date marketCapStart marketCapEnd
+1 1111     A+ 2014-01-01 2014-12-31            7.2          7.4
+2 1111     AA 2015-01-01 2015-12-31            7.3          7.5
+3 1111     AA 2016-01-01 2016-03-01            7.9          8.0
+4 2222     B- 2017-01-01 2017-01-31            6.5          6.9
+5 2222     B- 2018-01-01 2018-12-31            6.7          6.5
+6 2222     B- 2019-01-01 2020-02-01            6.8          7.0
 ```
 
 We can do this as below. A bit of explanation of some of the arguments:
@@ -66,7 +71,14 @@ We can do this as below. A bit of explanation of some of the arguments:
     and `%Y-%m-%d %H:%M:%OS` for timestamps. If your ranges are in
     another format, you need to modify that accordingly;
 
-  - `groups` argument is optional.
+  - `groups` argument is optional;
+
+  - `startVars` and `endVars` are attributes of every date/timestamp
+    record (optional as arguments). Once the ranges are collapsed, each
+    record will keep the `startVars` from the very beginning of the
+    range while the `endVars` will contain the attributes from the very
+    end of the range. It’s possible to include multiple columns both in
+    `startVars` as well as `endVars`.
 
 <!-- end list -->
 
@@ -75,6 +87,8 @@ df_collapsed <- collapse_ranges(df,
                                 groups = c("id", "rating"), 
                                 start_var = "start_date", 
                                 end_var = "end_date",
+                                startVars = "marketCapStart",
+                                endVars = "marketCapEnd",
                                 max_gap = 0L,
                                 fmt = "%Y-%m-%d",
                                 dimension = "date"
@@ -84,11 +98,11 @@ df_collapsed
 ```
 
 ``` 
-    id rating start_date   end_date
-1 1111     A+ 2014-01-01 2014-12-31
-2 1111     AA 2015-01-01 2016-03-01
-3 2222     B- 2017-01-01 2017-01-31
-4 2222     B- 2018-01-01 2020-02-01
+    id rating start_date   end_date marketCapStart marketCapEnd
+1 1111     A+ 2014-01-01 2014-12-31            7.2          7.4
+2 1111     AA 2015-01-01 2016-03-01            7.3            8
+3 2222     B- 2017-01-01 2017-01-31            6.5          6.9
+4 2222     B- 2018-01-01 2020-02-01            6.7            7
 ```
 
 We can address timestamps in a similar way, only now we need to specify
@@ -128,8 +142,8 @@ df_collapsed <- collapse_ranges(df,
 ```
 
     Warning in collapse_ranges(df, groups = c("id", "diary"), start_var =
-    "start_time", : Dimension 'timestamp' selected but format unchanged. Will
-    try to convert to '%Y-%m-%d %H:%M:%OS' ..
+    "start_time", : Dimension 'timestamp' selected but format unchanged. Will try to
+    convert to '%Y-%m-%d %H:%M:%OS' ..
 
 ``` r
 df_collapsed
@@ -365,7 +379,8 @@ df
 
 As you have probably noticed, the output contains only the relevant
 columns: range variables & grouping variables. Note that the `groups`
-argument is optional.
+argument is optional. On the other hand, *you can also use the
+`startVars` and `endVars` arguments, the same as in `collapse_ranges`*.
 
 ## fill\_ranges
 
