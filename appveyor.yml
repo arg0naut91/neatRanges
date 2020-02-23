@@ -34,6 +34,9 @@ environment:
     R_ARCH: x64
 
   - R_VERSION: stable
+  
+  - R_VERSION: 3.5.3
+    RTOOLS_VERSION: 35
 
 matrix:
   fast_finish: true

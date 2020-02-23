@@ -75,12 +75,13 @@ We can do this as below. A bit of explanation of some of the arguments:
 
   - `groups` argument is optional;
 
-  - `startVars` and `endVars` are attributes of every date/timestamp
-    record (optional as arguments). Once the ranges are collapsed, each
-    record will keep the `startVars` from the very beginning of the
-    range while the `endVars` will contain the attributes from the very
-    end of the range. It’s possible to include multiple columns both in
-    `startVars` as well as `endVars`.
+  - (*Currently only available in development version*) `startVars` and
+    `endVars` are attributes of every date/timestamp record (optional as
+    arguments). Once the ranges are collapsed, each record will keep the
+    `startVars` from the very beginning of the range while the `endVars`
+    will contain the attributes from the very end of the range. It’s
+    possible to include multiple columns both in `startVars` as well as
+    `endVars`.
 
 <!-- end list -->
 

@@ -47,6 +47,42 @@ test_that("fill_ranges functions with date formats", {
 
 )
 
+test_that("fill_ranges functions with date formats & data.tables", {
+  
+  df <- data.table(
+    group = c("a", "a", "b", "b", "b"),
+    start = c("2007-01-01", "2010-06-02", "2009-04-05", "2012-08-01", "2019-03-19"),
+    end = c("2008-02-05", "2013-04-05", "2009-06-03", "2013-02-17", "2021-04-21"),
+    cost = c(143, 144, 105, 153, 124)
+  )
+  
+  output_date <- structure(
+    list(
+      group = c("a", "a", "a", "b", "b", "b", "b", "b"),
+      start = structure(c(
+        13514, 13915, 14762, 14339, 14399, 15553,
+        15754, 17974
+      ), class = "Date"),
+      end = structure(c(
+        13914, 14761,
+        15800, 14398, 15552, 15753, 17973, 18738
+      ), class = "Date"),
+      cost = c(143,
+               NA, 144, 105, NA, 153, NA, 124)
+    ),
+    row.names = c(NA,-8L),
+    class = c("data.table",
+              "data.frame")
+  )
+  
+  df <- fill_ranges(df, start_var = "start", end_var = "end", groups = c("group"))
+  
+  expect_equal(output_date, df)
+  
+}
+
+)
+
 test_that("fill_ranges functions with date formats & no groups", {
   
   df <- data.frame(
