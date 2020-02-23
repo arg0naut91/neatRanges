@@ -2,8 +2,8 @@ neatRanges
 ================
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/neatRanges)](https://cran.r-project.org/package=neatRanges)
-[![Travis build
-status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
+[![Travis build status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
+[![Build status](https://ci.appveyor.com/api/projects/status/tmcsyxvp5rthru04?svg=true)](https://ci.appveyor.com/project/arg0naut91/neatranges)
 [![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
