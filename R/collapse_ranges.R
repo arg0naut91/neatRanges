@@ -53,7 +53,7 @@ collapse_ranges <- function(df,
   
   if (dimension == "date") {
     
-    if (any(sapply(df_collapsed[rangevars], is.factor)) | any(sapply(df_collapsed[rangevars], is.character))) {
+    if (any(sapply(df_collapsed[, rangevars], is.factor)) | any(sapply(df_collapsed[, rangevars], is.character))) {
       
       df_collapsed <- df_collapsed[
         , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
@@ -163,7 +163,7 @@ collapse_ranges <- function(df,
     
   } else if (dimension == "timestamp") {
     
-    if (any(sapply(df_collapsed[rangevars], is.factor)) | any(sapply(df_collapsed[rangevars], is.character))) {
+    if (any(sapply(df_collapsed[, rangevars], is.factor)) | any(sapply(df_collapsed[, rangevars], is.character))) {
       
       if (fmt == "%Y-%m-%d") {
         
