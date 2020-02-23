@@ -47,9 +47,13 @@ collapse_ranges <- function(df,
     end_var
   )
   
+  startEndVars <- c(startVars, endVars)
+  
   df_collapsed <- copy(df)
   
   if (!any(class(df_collapsed) %in% "data.table")) setDT(df_collapsed)
+  
+  if (!is.null(startVars) | !is.null(endVars)) df_collapsed <- df_collapsed[, (startEndVars) := lapply(.SD, as.character), .SDcols = startEndVars]
   
   if (dimension == "date") {
     
@@ -239,7 +243,7 @@ collapse_ranges <- function(df,
                                                            endObjects = mget(endVars)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startVars, endVars))
         
       } else if (!is.null(startVars) & is.null(endVars)) {
         
@@ -250,7 +254,7 @@ collapse_ranges <- function(df,
                                                            endObjects = NULL
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startVars))
         
       } else if (is.null(startVars) & !is.null(endVars)) {
         
@@ -261,7 +265,7 @@ collapse_ranges <- function(df,
                                                            endObjects = mget(endVars)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, endVars))
         
       } else {
         
@@ -272,7 +276,7 @@ collapse_ranges <- function(df,
                                                            endObjects = NULL
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var))
         
       }
       
