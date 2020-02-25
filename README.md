@@ -9,7 +9,7 @@ status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://
 [![Build
 status](https://ci.appveyor.com/api/projects/status/tmcsyxvp5rthru04?svg=true)](https://ci.appveyor.com/project/arg0naut91/neatranges)
 [![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 The aim of `neatRanges` is to provide tools for working with date &
 timestamp ranges, namely:
@@ -23,7 +23,8 @@ timestamp ranges, namely:
 It primarily uses `data.table` in order to speed up the operations. One
 of the functions - `collapse_ranges` - also uses `Rcpp`, thanks to the
 idea from
-[Patrikios/customerRelationship](https://github.com/Patrikios/customerRelationship).
+[Patrikios/customerRelationship](https://github.com/Patrikios/customerRelationship)
+(currently this is available only in development version).
 
 You can install it from CRAN by `install.packages('neatRanges')`.
 
@@ -75,13 +76,14 @@ We can do this as below. A bit of explanation of some of the arguments:
 
   - `groups` argument is optional;
 
-  - (*Currently only available in development version*) `startVars` and
-    `endVars` are attributes of every date/timestamp record (optional as
+  - (*Currently only available in development version*) `startAttr` and
+    `endAttr` are attributes of every date/timestamp record (optional as
     arguments). Once the ranges are collapsed, each record will keep the
-    `startVars` from the very beginning of the range while the `endVars`
+    `startAttr` from the very beginning of the range while the `endAttr`
     will contain the attributes from the very end of the range. It’s
-    possible to include multiple columns both in `startVars` as well as
-    `endVars`.
+    possible to include multiple columns both in `startAttr` as well as
+    `endAttr`. Note that all of them will be - for safety reasons -
+    converted to *character* beforehand.
 
 <!-- end list -->
 
@@ -90,8 +92,8 @@ df_collapsed <- collapse_ranges(df,
                                 groups = c("id", "rating"), 
                                 start_var = "start_date", 
                                 end_var = "end_date",
-                                startVars = "marketCapStart",
-                                endVars = "marketCapEnd",
+                                startAttr = "marketCapStart",
+                                endAttr = "marketCapEnd",
                                 max_gap = 0L,
                                 fmt = "%Y-%m-%d",
                                 dimension = "date"
@@ -383,7 +385,7 @@ df
 As you have probably noticed, the output contains only the relevant
 columns: range variables & grouping variables. Note that the `groups`
 argument is optional. On the other hand, *you can also use the
-`startVars` and `endVars` arguments, the same as in `collapse_ranges`*.
+`startAttr` and `endAttr` arguments, the same as in `collapse_ranges`*.
 
 ## fill\_ranges
 

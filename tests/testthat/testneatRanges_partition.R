@@ -2,7 +2,7 @@
 #
 # Test script for neatRanges - partition_ranges
 #
-# Last updated on 07/04/2019
+# Last updated on 25/02/2020
 #
 ################################################
 context("partition_ranges")

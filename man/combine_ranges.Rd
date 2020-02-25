@@ -9,8 +9,8 @@ combine_ranges(
   groups = NULL,
   start_var = NULL,
   end_var = NULL,
-  startVars = NULL,
-  endVars = NULL,
+  startAttr = NULL,
+  endAttr = NULL,
   dimension = "date",
   max_gap = 0L,
   fmt = "\%Y-\%m-\%d",
@@ -27,9 +27,9 @@ combine_ranges(
 
 \item{end_var}{End of the range}
 
-\item{startVars}{Attributes linked to start of the range which should be kept (converted to character type by default)}
+\item{startAttr}{Attributes linked to start of the range which should be kept (converted to character type by default)}
 
-\item{endVars}{Attributes linked to end of the range which should be kept (converted to character type by default)}
+\item{endAttr}{Attributes linked to end of the range which should be kept (converted to character type by default)}
 
 \item{dimension}{Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'}
 

@@ -4,8 +4,8 @@
 #' @param groups Grouping variables
 #' @param start_var Start of the range
 #' @param end_var End of the range
-#' @param startVars Attributes linked to start of the range which should be kept (converted to character type by default)
-#' @param endVars Attributes linked to end of the range which should be kept (converted to character type by default)
+#' @param startAttr Attributes linked to start of the range which should be kept (converted to character type by default)
+#' @param endAttr Attributes linked to end of the range which should be kept (converted to character type by default)
 #' @param max_gap Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between
 #' @param dimension Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'
 #' @param fmt The format of your date or timestamp field, defaults to YMD
@@ -36,8 +36,8 @@ combine_ranges <- function(dfs,
                            groups = NULL,
                            start_var = NULL,
                            end_var = NULL,
-                           startVars = NULL,
-                           endVars = NULL,
+                           startAttr = NULL,
+                           endAttr = NULL,
                            dimension = "date",
                            max_gap = 0L,
                            fmt = "%Y-%m-%d",
@@ -50,11 +50,11 @@ combine_ranges <- function(dfs,
     
     if (!chckClass) {
       
-      x <- x[, c(groups, start_var, end_var, startVars, endVars)]
+      x <- x[, c(groups, start_var, end_var, startAttr, endAttr)]
       
     } else {
       
-      colsToKeep <- c(groups, start_var, end_var, startVars, endVars)
+      colsToKeep <- c(groups, start_var, end_var, startAttr, endAttr)
       
       x <- x[, ..colsToKeep]
       
@@ -72,8 +72,8 @@ combine_ranges <- function(dfs,
                          start_var = start_var,
                          end_var = end_var,
                          groups = groups,
-                         startVars = startVars,
-                         endVars = endVars,
+                         startAttr = startAttr,
+                         endAttr = endAttr,
                          max_gap = max_gap,
                          dimension = dimension,
                          fmt = fmt,

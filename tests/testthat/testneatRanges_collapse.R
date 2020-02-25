@@ -2,7 +2,7 @@
 #
 # Test script for neatRanges - collapse_ranges
 #
-# Last updated on 04/04/2019
+# Last updated on 25/02/2020
 #
 ###############################################
 context("collapse_ranges")
@@ -133,7 +133,7 @@ test_that("collapse_ranges functions with timestamps", {
 
 )
 
-test_that("collapse_ranges functions with dates, groups and startEndVars", {
+test_that("collapse_ranges functions with dates, groups and startendAttr", {
   
   df_collapse <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
@@ -178,7 +178,7 @@ test_that("collapse_ranges functions with dates, groups and startEndVars", {
   )
   
   df <- collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date",
-                        c("startName1", "startName2"), endVars = c("endName1", "endName2"))
+                        c("startName1", "startName2"), endAttr = c("endName1", "endName2"))
   
   expect_equal(df, output_vars)
   
@@ -273,13 +273,13 @@ test_that("collapse_ranges functions with dates, groups and end Vars only", {
     class = "data.frame"
   )
   
-  df <- collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date", endVars = c("endName1", "endName2"))
+  df <- collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date", endAttr = c("endName1", "endName2"))
   
   expect_equal(df, output_vars)
   
 })
 
-test_that("collapse_ranges functions with dates, no groups and startEndVars", {
+test_that("collapse_ranges functions with dates, no groups and startendAttr", {
   
   df_collapse <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
@@ -300,7 +300,7 @@ test_that("collapse_ranges functions with dates, no groups and startEndVars", {
                                                                                   "X70", "X90")), row.names = c(NA, -3L), class = "data.frame")
   
   df <- collapse_ranges(df_collapse, start_var = "start_date", end_var = "end_date",
-                        startVars = c("startName1"), endVars = c("endName1"))
+                        startAttr = c("startName1"), endAttr = c("endName1"))
   
   expect_equal(df, output_vars)
   
@@ -327,7 +327,7 @@ test_that("collapse_ranges functions with dates, no groups and start vars only",
                                 ), class = "data.frame")
   
   df <- collapse_ranges(df_collapse, start_var = "start_date", end_var = "end_date",
-                        startVars = c("startName1"))
+                        startAttr = c("startName1"))
   
   expect_equal(df, output_vars)
   
@@ -354,13 +354,13 @@ test_that("collapse_ranges functions with dates, no groups and end vars only", {
                                 ), class = "data.frame")
   
   df <- collapse_ranges(df_collapse, start_var = "start_date", end_var = "end_date",
-                        endVars = c("endName2"))
+                        endAttr = c("endName2"))
   
   expect_equal(df, output_vars)
   
 })
 
-test_that("collapse_ranges functions with times, groups and startEndVars", {
+test_that("collapse_ranges functions with times, groups and startendAttr", {
   
   df_collapse_time <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
@@ -411,7 +411,7 @@ test_that("collapse_ranges functions with times, groups and startEndVars", {
   )
   
   df <- collapse_ranges(df_collapse_time, c("id", "diary"), "start_time", "end_time",
-                        c("startName1", "startName2"), endVars = c("endName1", "endName2"), dimension = 'timestamp')
+                        c("startName1", "startName2"), endAttr = c("endName1", "endName2"), dimension = 'timestamp')
   
   expect_equal(df, output_vars)
   
@@ -520,13 +520,13 @@ test_that("collapse_ranges functions with times, groups and end Vars only", {
     class = "data.frame"
   )
   
-  df <- collapse_ranges(df_collapse_time, c("id", "diary"), "start_time", "end_time", endVars = c("endName1", "endName2"), dimension = 'timestamp')
+  df <- collapse_ranges(df_collapse_time, c("id", "diary"), "start_time", "end_time", endAttr = c("endName1", "endName2"), dimension = 'timestamp')
   
   expect_equal(df, output_vars)
   
 })
 
-test_that("collapse_ranges functions with times, no groups and startEndVars", {
+test_that("collapse_ranges functions with times, no groups and startendAttr", {
   
   df_collapse_time <- data.frame(
     id = c(rep("1111", 3), rep("2222", 3)),
@@ -566,7 +566,7 @@ test_that("collapse_ranges functions with times, no groups and startEndVars", {
   )
   
   df <- collapse_ranges(df_collapse_time, start_var = "start_time", end_var = "end_time",
-                        startVars = c("startName1", "startName2"), endVars = c("endName1", "endName2"), dimension = 'timestamp')
+                        startAttr = c("startName1", "startName2"), endAttr = c("endName1", "endName2"), dimension = 'timestamp')
   
   expect_equal(df, output_vars)
   
@@ -609,7 +609,7 @@ test_that("collapse_ranges functions with times, no groups and start vars only",
   )
   
   df <- collapse_ranges(df_collapse_time, start_var = "start_time", end_var = "end_time",
-                        startVars = c("startName1", "startName2"), dimension = 'timestamp')
+                        startAttr = c("startName1", "startName2"), dimension = 'timestamp')
   
   expect_equal(df, output_vars)
   
@@ -652,7 +652,7 @@ test_that("collapse_ranges functions with times, no groups and end vars only", {
   )
   
   df <- collapse_ranges(df_collapse_time, start_var = "start_time", end_var = "end_time",
-                        endVars = c("endName1", "endName2"), dimension = 'timestamp')
+                        endAttr = c("endName1", "endName2"), dimension = 'timestamp')
   
   expect_equal(df, output_vars)
   
@@ -713,6 +713,6 @@ test_that("error when wrong dimension", {
   )
   
   expect_error(collapse_ranges(df_collapse_time, start_var = "start_date", end_var = "end_date",
-                              endVars = c("endName2"), dimension = 'time'), "The dimension argument has to be either 'date' or 'timestamp'.")
+                              endAttr = c("endName2"), dimension = 'time'), "The dimension argument has to be either 'date' or 'timestamp'.")
   
 })

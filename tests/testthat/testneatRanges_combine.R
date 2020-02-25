@@ -2,7 +2,7 @@
 #
 # Test script for neatRanges - combine_ranges
 #
-# Last updated on 16/06/2019
+# Last updated on 25/02/2020
 #
 ###############################################
 context("combine_ranges")
@@ -55,7 +55,7 @@ test_that("combine_ranges functions with date formats", {
 
 )
 
-test_that("combine_ranges functions with date formats and startEndVars", {
+test_that("combine_ranges functions with date formats and startendAttr", {
   
   df1 <- data.frame(
     start = c("2010-01-01", "2012-06-01", "2014-10-15"),
@@ -105,7 +105,7 @@ test_that("combine_ranges functions with date formats and startEndVars", {
     class = "data.frame"
   )
   
-  df <- combine_ranges(list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group", startVars = c('infoStart'), endVars = c('infoEnd'))
+  df <- combine_ranges(list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group", startAttr = c('infoStart'), endAttr = c('infoEnd'))
   
   expect_equal(output_date, df)
   
@@ -113,7 +113,7 @@ test_that("combine_ranges functions with date formats and startEndVars", {
 
 )
 
-test_that("combine_ranges functions with date formats and startEndVars and DT", {
+test_that("combine_ranges functions with date formats and startendAttr and DT", {
   
   df1 <- data.table::data.table(
     start = c("2010-01-01", "2012-06-01", "2014-10-15"),
@@ -158,7 +158,7 @@ test_that("combine_ranges functions with date formats and startEndVars and DT", 
     class = c("data.table", "data.frame")
   )
   
-  df <- combine_ranges(list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group", startVars = c('infoStart'), endVars = c('infoEnd'))
+  df <- combine_ranges(list(df1, df2, df3), start_var = "start", end_var = "end", groups = "group", startAttr = c('infoStart'), endAttr = c('infoEnd'))
   
   expect_equal(output_date, df)
   

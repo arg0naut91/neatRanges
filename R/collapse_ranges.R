@@ -6,8 +6,8 @@
 #' @param groups Grouping variables
 #' @param start_var Start of the range
 #' @param end_var End of the range
-#' @param startVars Attributes linked to start of the range which should be kept (converted to character type by default)
-#' @param endVars Attributes linked to end of the range which should be kept (converted to character type by default)
+#' @param startAttr Attributes linked to start of the range which should be kept (converted to character type by default)
+#' @param endAttr Attributes linked to end of the range which should be kept (converted to character type by default)
 #' @param max_gap Gap between date or timestamp ranges, e.g. for 0, default, it will put together all records where there is no gap in-between
 #' @param dimension Indicate whether your range includes only dates ('date') or also timestamp ('timestamp'). Defaults to 'date'
 #' @param fmt The format of your date or timestamp field, defaults to YMD
@@ -32,74 +32,64 @@ collapse_ranges <- function(df,
                             groups = NULL,
                             start_var = NULL,
                             end_var = NULL,
-                            startVars = NULL,
-                            endVars = NULL,
+                            startAttr = NULL,
+                            endAttr = NULL,
                             dimension = "date",
                             max_gap = 0L,
                             fmt = "%Y-%m-%d",
                             tz = "UTC",
                             origin = "1970-01-01") {
   
-  groupsArrange <- c(groups, start_var)
-  
-  rangevars <- c(
-    start_var,
-    end_var
-  )
-  
-  startEndVars <- c(startVars, endVars)
-  
   df_collapsed <- copy(df)
   
-  if (!any(class(df_collapsed) %in% "data.table")) setDT(df_collapsed)
+  if (!any(class(df) %in% "data.table")) setDT(df_collapsed)
   
-  if (!is.null(startVars) | !is.null(endVars)) df_collapsed <- df_collapsed[, (startEndVars) := lapply(.SD, as.character), .SDcols = startEndVars]
+  if (!is.null(startAttr) | !is.null(endAttr)) for (j in c(startAttr, endAttr)) set(df_collapsed, j = j, value = as.character(df_collapsed[[j]])) 
   
   if (dimension == "date") {
     
-    if (any(sapply(df_collapsed[, ..rangevars], is.factor)) | any(sapply(df_collapsed[, ..rangevars], is.character))) {
+    if (class(df_collapsed[[start_var]]) != 'Date' | class(df_collapsed[[end_var]]) != 'Date') {
       
-      df_collapsed <- df_collapsed[
-        , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+      for (j in c(start_var, end_var)) set(df_collapsed, j = j, value = as.Date(as.character(df_collapsed[[j]]), format = fmt))
       
     }
     
-    df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
+    setorderv(df_collapsed, c(groups, start_var))
     
     if (!is.null(groups)) {
       
-      if (!is.null(startVars) & !is.null(endVars)) {
+      if (!is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
-                                                       startObjects = mget(startVars),
-                                                       endObjects = mget(endVars)
+                                                       startObjects = mget(startAttr),
+                                                       endObjects = mget(endAttr)
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr, endAttr))
         
-      } else if (!is.null(startVars) & is.null(endVars)) {
+      } else if (!is.null(startAttr) & is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
-                                                       startObjects = mget(startVars),
+                                                       startObjects = mget(startAttr),
                                                        endObjects = NULL
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr))
         
-      } else if (is.null(startVars) & !is.null(endVars)) {
+      } else if (is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
                                                        startObjects = NULL,
-                                                       endObjects = mget(endVars)
+                                                       endObjects = mget(endAttr)
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endAttr))
         
       } else {
         
@@ -116,38 +106,38 @@ collapse_ranges <- function(df,
       
     } else {
       
-      if (!is.null(startVars) & !is.null(endVars)) {
+      if (!is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
-                                                       startObjects = mget(startVars),
-                                                       endObjects = mget(endVars)
+                                                       startObjects = mget(startAttr),
+                                                       endObjects = mget(endAttr)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr, endAttr))
         
-      } else if (!is.null(startVars) & is.null(endVars)) {
+      } else if (!is.null(startAttr) & is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
-                                                       startObjects = mget(startVars),
+                                                       startObjects = mget(startAttr),
                                                        endObjects = NULL
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr))
         
-      } else if (is.null(startVars) & !is.null(endVars)) {
+      } else if (is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubset(get(start_var), 
                                                        get(end_var), 
                                                        max_gap = max_gap,
                                                        startObjects = NULL,
-                                                       endObjects = mget(endVars)
+                                                       endObjects = mget(endAttr)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endAttr))
         
       } else {
         
@@ -167,7 +157,7 @@ collapse_ranges <- function(df,
     
   } else if (dimension == "timestamp") {
     
-    if (any(sapply(df_collapsed[, ..rangevars], is.factor)) | any(sapply(df_collapsed[, ..rangevars], is.character))) {
+    if (!class(df_collapsed[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(df_collapsed[[end_var]]) %in% c('POSIXct', 'POSIXt')) {
       
       if (fmt == "%Y-%m-%d") {
         
@@ -177,47 +167,46 @@ collapse_ranges <- function(df,
         
       }
       
-      df_collapsed <- df_collapsed[
-        , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
+      for (j in c(start_var, end_var)) set(df_collapsed, j = j, value = as.POSIXct(as.character(df_collapsed[[j]]), format = fmt, tz = tz))
       
     }
     
-    df_collapsed <- df_collapsed[with(df_collapsed, do.call(order, mget(groupsArrange))), ]
+    setorderv(df_collapsed, c(groups, start_var))
     
     if (!is.null(groups)) {
       
-      if (!is.null(startVars) & !is.null(endVars)) {
+      if (!is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
-                                                           startObjects = mget(startVars),
-                                                           endObjects = mget(endVars)
+                                                           startObjects = mget(startAttr),
+                                                           endObjects = mget(endAttr)
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr, endAttr))
         
-      } else if (!is.null(startVars) & is.null(endVars)) {
+      } else if (!is.null(startAttr) & is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
-                                                           startObjects = mget(startVars),
+                                                           startObjects = mget(startAttr),
                                                            endObjects = NULL
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, startAttr))
         
-      } else if (is.null(startVars) & !is.null(endVars)) {
+      } else if (is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
                                                            startObjects = NULL,
-                                                           endObjects = mget(endVars)
+                                                           endObjects = mget(endAttr)
         ), by = mget(groups)]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(groups, start_var, end_var, endAttr))
         
       } else {
         
@@ -234,38 +223,38 @@ collapse_ranges <- function(df,
       
     } else {
       
-      if (!is.null(startVars) & !is.null(endVars)) {
+      if (!is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
-                                                           startObjects = mget(startVars),
-                                                           endObjects = mget(endVars)
+                                                           startObjects = mget(startAttr),
+                                                           endObjects = mget(endAttr)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startVars, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startAttr, endAttr))
         
-      } else if (!is.null(startVars) & is.null(endVars)) {
+      } else if (!is.null(startAttr) & is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
-                                                           startObjects = mget(startVars),
+                                                           startObjects = mget(startAttr),
                                                            endObjects = NULL
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, startAttr))
         
-      } else if (is.null(startVars) & !is.null(endVars)) {
+      } else if (is.null(startAttr) & !is.null(endAttr)) {
         
         df_collapsed <- df_collapsed[, updateAndSubsetTime(get(start_var), 
                                                            get(end_var), 
                                                            max_gap = max_gap,
                                                            startObjects = NULL,
-                                                           endObjects = mget(endVars)
+                                                           endObjects = mget(endAttr)
         )]
         
-        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, endVars))
+        setnames(df_collapsed, 1:ncol(df_collapsed), c(start_var, end_var, endAttr))
         
       } else {
         

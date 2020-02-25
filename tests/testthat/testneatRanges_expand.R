@@ -2,7 +2,7 @@
 #
 # Test script for neatRanges - expand_*
 #
-# Last updated on 06/04/2019
+# Last updated on 25/02/2020
 #
 ################################################
 context("expand_dates")
