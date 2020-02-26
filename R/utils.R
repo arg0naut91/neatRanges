@@ -10,6 +10,5 @@ globalVariables(c("rn",
                   "shift_tmp",
                   "startObjects",
                   "endObjects",
-                  "..rangevars",
                   "..colsToKeep")
                 )

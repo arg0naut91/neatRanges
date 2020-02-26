@@ -32,13 +32,9 @@ expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
 
   if (!any(class(expdf) %in% "data.table")) setDT(expdf)
 
-  rangevars <- c(
-    start_var, end_var
-  )
+  if (class(expdf[[start_var]]) != 'Date' | class(expdf[[end_var]]) != 'Date') {
 
-  if (is.factor(expdf[[start_var]]) | is.character(expdf[[start_var]])) {
-
-    expdf <- expdf[, (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+    for (j in c(start_var, end_var)) set(expdf, j = j, value = as.Date(as.character(expdf[[j]]), format = fmt))
 
   }
 
@@ -97,11 +93,14 @@ expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
   rangevars <- c(
     start_var, end_var
   )
+  
+  if (!class(expdf[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(expdf[[end_var]]) %in% c('POSIXct', 'POSIXt')) {
+    
+    for (j in c(start_var, end_var)) set(expdf, j = j, value = as.POSIXct(as.character(expdf[[j]]), format = fmt, tz = tz))
+    
+  }
 
-  expdf <- setDT(expdf)[, (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = "UTC")), .SDcols = rangevars][
-    , rn := seq(.N)][
-      , .(Expanded = seq.POSIXt(get(start_var), get(end_var), by = unit)), by = mget(grouping)][
-        , rn := NULL]
+  expdf <- setDT(expdf)[, rn := seq(.N)][, .(Expanded = seq.POSIXt(get(start_var), get(end_var), by = unit)), by = mget(grouping)][, rn := NULL]
 
   setnames(expdf, "Expanded", name)
 

@@ -20,17 +20,13 @@
 #' @export
 partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_keep = NULL, partition_by = "year") {
 
-  rangevars <- c(
-    start_var, end_var
-  )
-
   partitioned <- copy(df)
 
   if (!any(class(partitioned) %in% "data.table")) setDT(partitioned)
 
-  if (is.factor(partitioned[[start_var]]) | is.character(partitioned[[start_var]])) {
+  if (class(partitioned[[start_var]]) != 'Date' | class(partitioned[[end_var]]) != 'Date') {
 
-    partitioned <- partitioned[, `:=`((rangevars), lapply(.SD, function(x) as.Date(as.character(x), format = fmt))), .SDcols = rangevars]
+    for (j in c(start_var, end_var)) set(partitioned, j = j, value = as.Date(as.character(partitioned[[j]]), format = fmt))
 
   }
 
@@ -45,7 +41,9 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
   ############################################################################################################
 
   if (partition_by == "year") {
+    
     grpRnD <- c("rl", vars_to_keep)
+    
     partitioned <- partitioned[partitioned[, rep(.I, 1 +
                                                    year(get(end_var)) - year(get(start_var)))]][
                                                      , `:=`(rl,  rleid(get(start_var)))][
@@ -54,14 +52,19 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
                                                            ,  `:=`("rl", NULL)]
   }
   else if (partition_by == "month") {
+    
     grpRnD <- c("nrow", vars_to_keep, start_var, end_var)
+    
     grp2ndlev <- c(vars_to_keep, start_var)
+    
     partitionedIn <- partitioned[(format(get(start_var),
                                          "%Y-%m") == format(get(end_var), "%Y-%m")),
                                  ]
+    
     partitionedOut <- partitioned[!(format(get(start_var),
                                            "%Y-%m") == format(get(end_var), "%Y-%m")),
                                   ]
+    
     partitionedOut <- partitionedOut[, st_seq := as.Date(paste0(format(get(start_var), "%Y-%m"), "-01"))][
       , end_seq := {
 
@@ -83,23 +86,39 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
                                          .SDcols = substitute(end_var)]
 
     nms <- names(partitionedOut)
+    
     if (nrow(partitionedIn) > 0) {
+      
       partitionedIn <- partitionedIn[, names(partitionedIn) %in%
                                        nms, with = FALSE]
       partitioned <- rbind(partitionedIn, partitionedOut)
     }
+    
     else {
+      
       partitioned <- partitionedOut
+      
     }
+    
     partitioned <- setorderv(partitioned, nms)
   }
+  
   else {
+    
     stop("partition_by argument has to be either 'year' or 'month'.")
+    
   }
+  
   if (!any(class(df) %in% "data.table")) {
+    
     return(setDF(partitioned))
+    
   }
+  
   else {
+    
     return(partitioned)
+    
   }
+  
 }

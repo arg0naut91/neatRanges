@@ -33,24 +33,17 @@ fill_ranges <- function(df,
                         origin = "1970-01-01"
 ) {
 
-  rangevars <- c(
-    start_var,
-    end_var
-  )
-
-  groupsArrange <- c(groups, start_var)
-  colsToRetain <- c(groups, rangevars)
+  colsToRetain <- c(groups, start_var, end_var)
 
   dfCopy <- copy(df)
 
   if (!any(class(dfCopy) %in% "data.table")) setDT(dfCopy)
 
-  if (dimension == "date" & (is.factor(dfCopy[[start_var]]) | is.character(dfCopy[[start_var]])) ) {
+  if (dimension == "date" & (class(dfCopy[[start_var]]) != 'Date' | class(dfCopy[[end_var]]) != 'Date') ) {
 
-    dfCopy <- setDT(dfCopy)[
-      , (rangevars) := lapply(.SD, function(x) as.Date(as.character(x), format = fmt)), .SDcols = rangevars]
+    for (j in c(start_var, end_var)) set(dfCopy, j = j, value = as.Date(as.character(dfCopy[[j]]), format = fmt))
 
-  } else if (dimension == "timestamp" & (is.factor(dfCopy[[start_var]]) | is.character(dfCopy[[start_var]])) ) {
+  } else if (dimension == "timestamp" & (!class(dfCopy[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(dfCopy[[end_var]]) %in% c('POSIXct', 'POSIXt')) ) {
 
     if (fmt == "%Y-%m-%d") {
 
@@ -60,12 +53,11 @@ fill_ranges <- function(df,
 
     }
 
-    dfCopy <- setDT(dfCopy)[
-      , (rangevars) := lapply(.SD, function(x) as.POSIXct(as.character(x), format = fmt, tz = tz)), .SDcols = rangevars]
+    for (j in c(start_var, end_var)) set(dfCopy, j = j, value = as.POSIXct(as.character(dfCopy[[j]]), format = fmt, tz = tz))
 
   }
-
-  dfCopy <- dfCopy[with(dfCopy, do.call(order, mget(groupsArrange))),]
+  
+  setorderv(dfCopy, c(groups, start_var))
 
   dfFilled <- copy(dfCopy)
 
@@ -109,8 +101,8 @@ fill_ranges <- function(df,
   }
 
   dfFinal <- rbindlist(list(dfCopy, dfFilled), fill = T)
-
-  dfFinal <- dfFinal[with(dfFinal, do.call(order, mget(groupsArrange))),]
+  
+  setorderv(dfFinal, c(groups, start_var))
 
   if (!any(class(df) %in% "data.table")) {
 
