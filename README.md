@@ -2,8 +2,6 @@ neatRanges
 ================
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/neatRanges)](https://cran.r-project.org/package=neatRanges)
-[![Development
-version](https://img.shields.io/badge/devel%20version-0.1.1-brightgreen.svg)](https://github.com/arg0naut91/neatRanges)
 [![Travis build
 status](https://travis-ci.org/arg0naut91/neatRanges.svg?branch=master)](https://travis-ci.org/arg0naut91/neatRanges)
 [![Build
@@ -23,8 +21,7 @@ timestamp ranges, namely:
 It primarily uses `data.table` in order to speed up the operations. One
 of the functions - `collapse_ranges` - also uses `Rcpp`, thanks to the
 idea from
-[Patrikios/customerRelationship](https://github.com/Patrikios/customerRelationship)
-(currently this is available only in development version).
+[Patrikios/customerRelationship](https://github.com/Patrikios/customerRelationship).
 
 You can install it from CRAN by `install.packages('neatRanges')`.
 
@@ -76,14 +73,13 @@ We can do this as below. A bit of explanation of some of the arguments:
 
   - `groups` argument is optional;
 
-  - (*Currently only available in development version*) `startAttr` and
-    `endAttr` are attributes of every date/timestamp record (optional as
-    arguments). Once the ranges are collapsed, each record will keep the
-    `startAttr` from the very beginning of the range while the `endAttr`
-    will contain the attributes from the very end of the range. It’s
-    possible to include multiple columns both in `startAttr` as well as
-    `endAttr`. Note that all of them will be - for safety reasons -
-    converted to *character* beforehand.
+  - `startAttr` and `endAttr` are attributes of every date/timestamp
+    record (optional as arguments). Once the ranges are collapsed, each
+    record will keep the `startAttr` from the very beginning of the
+    range while the `endAttr` will contain the attributes from the very
+    end of the range. It’s possible to include multiple columns both in
+    `startAttr` as well as `endAttr`. Note that all of them will be -
+    for safety reasons - converted to *character* beforehand.
 
 <!-- end list -->
 
