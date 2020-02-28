@@ -13,21 +13,21 @@ test_that("combine_ranges functions with date formats", {
     start = c("2010-01-01", "2012-06-01", "2014-10-15"),
     end = c("2010-08-05", "2013-03-03", "2015-01-01"),
     group = c("a", "a", "b"),
-    infoScores = c(0, 3, 2)
+    infoScores = c(0, 3, 2), stringsAsFactors = TRUE
   )
   
   df2 <- data.frame(
     end = c("2012-04-05", "2014-06-09", "2009-02-01"),
     group = c("b", "a", "b"),
     start = c("2009-01-15", "2012-07-08", "2008-01-01"),
-    score = c(8, 2, 3)
+    score = c(8, 2, 3), stringsAsFactors = TRUE
   )
   
   df3 <- data.frame(
     end = c("2011-04-05", "2014-12-09", "2009-02-01"),
     group = c("a", "b", "c"),
     start = c("2010-02-03", "2014-07-08", "2008-01-01"),
-    scoreInfo = c(1, 2, 3)
+    scoreInfo = c(1, 2, 3), stringsAsFactors = TRUE
   )
   
   output_date <- structure(
@@ -63,7 +63,7 @@ test_that("combine_ranges functions with date formats and startendAttr", {
     group = c("a", "a", "b"),
     infoScores = c(0, 3, 2),
     infoStart = c(1, 2, 1),
-    infoEnd = c('X10', 'X11', 'X12')
+    infoEnd = c('X10', 'X11', 'X12'), stringsAsFactors = TRUE
   )
   
   df2 <- data.frame(
@@ -72,7 +72,7 @@ test_that("combine_ranges functions with date formats and startendAttr", {
     start = c("2009-01-15", "2012-07-08", "2008-01-01"),
     score = c(8, 2, 3),
     infoStart = c(1, 2, 1),
-    infoEnd = c('X12', 'X11', 'X10')
+    infoEnd = c('X12', 'X11', 'X10'), stringsAsFactors = TRUE
   )
   
   df3 <- data.frame(
@@ -81,7 +81,7 @@ test_that("combine_ranges functions with date formats and startendAttr", {
     start = c("2010-02-03", "2014-07-08", "2008-01-01"),
     scoreInfo = c(1, 2, 3),
     infoStart = c(1, 2, 1),
-    infoEnd = c('X11', 'X12', 'X11')
+    infoEnd = c('X11', 'X12', 'X11'), stringsAsFactors = TRUE
   )
   
   output_date <- structure(

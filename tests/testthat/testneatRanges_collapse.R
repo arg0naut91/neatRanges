@@ -15,7 +15,7 @@ test_that("collapse_ranges functions with date formats", {
     start_date = c("2014-01-01", "2015-01-01", "2016-01-01",
                    "2017-01-01", "2018-01-01", "2019-01-01"),
     end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
-                 "2017-01-31", "2018-12-31", "2020-02-01")
+                 "2017-01-31", "2018-12-31", "2020-02-01"), stringsAsFactors = TRUE
   )
 
   output_date <- structure(
@@ -57,7 +57,7 @@ test_that("collapse_ranges functions with date formats & no groups", {
     start_date = c("2014-01-01", "2015-01-01", "2016-01-01",
                    "2017-01-01", "2018-01-01", "2019-01-01"),
     end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
-                 "2017-01-31", "2018-12-31", "2020-02-01")
+                 "2017-01-31", "2018-12-31", "2020-02-01"), stringsAsFactors = TRUE
   )
 
   output_date <- structure(
@@ -91,7 +91,7 @@ test_that("collapse_ranges functions with timestamps", {
     start_time = c("2014-01-01 14:00:00", "2014-01-01 15:00:00", "2014-01-01 16:30:00",
                    "2015-01-01 15:00:00", "2015-01-01 17:00:00", "2015-01-01 19:00:00"),
     end_time = c("2014-01-01 14:59:59", "2014-01-01 16:29:59", "2014-01-01 19:00:00",
-                 "2015-01-01 15:59:59", "2015-01-01 18:59:59", "2015-01-01 21:00:00")
+                 "2015-01-01 15:59:59", "2015-01-01 18:59:59", "2015-01-01 21:00:00"), stringsAsFactors = TRUE
   )
 
   output_time <-
@@ -145,7 +145,7 @@ test_that("collapse_ranges functions with dates, groups and startendAttr", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -196,7 +196,7 @@ test_that("collapse_ranges functions with dates, groups and start Vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -244,7 +244,7 @@ test_that("collapse_ranges functions with dates, groups and end Vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -291,7 +291,7 @@ test_that("collapse_ranges functions with dates, no groups and startendAttr", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(list(start_date = structure(c(16071, 17167, 17532), class = "Date"), 
@@ -318,7 +318,7 @@ test_that("collapse_ranges functions with dates, no groups and start vars only",
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(list(start_date = structure(c(16071, 17167, 17532), class = "Date"), 
@@ -345,7 +345,7 @@ test_that("collapse_ranges functions with dates, no groups and end vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(list(start_date = structure(c(16071, 17167, 17532), class = "Date"), 
@@ -372,7 +372,7 @@ test_that("collapse_ranges functions with times, groups and startendAttr", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -429,7 +429,7 @@ test_that("collapse_ranges functions with times, groups and start Vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -484,7 +484,7 @@ test_that("collapse_ranges functions with times, groups and end Vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -538,7 +538,7 @@ test_that("collapse_ranges functions with times, no groups and startendAttr", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -584,7 +584,7 @@ test_that("collapse_ranges functions with times, no groups and start vars only",
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -627,7 +627,7 @@ test_that("collapse_ranges functions with times, no groups and end vars only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -670,7 +670,7 @@ test_that("collapse_ranges functions with times only", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   output_vars <- structure(
@@ -709,7 +709,7 @@ test_that("error when wrong dimension", {
     startName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     startName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
     endName1 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'),
-    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90')
+    endName2 = c('X40', 'X50', 'X60', 'X70', 'X80', 'X90'), stringsAsFactors = TRUE
   )
   
   expect_error(collapse_ranges(df_collapse_time, start_var = "start_date", end_var = "end_date",
