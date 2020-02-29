@@ -380,8 +380,8 @@ df
 
 As you have probably noticed, the output contains only the relevant
 columns: range variables & grouping variables. Note that the `groups`
-argument is optional. On the other hand, *you can also use the
-`startAttr` and `endAttr` arguments, the same as in `collapse_ranges`*.
+argument is optional. On the other hand, you can also use the
+`startAttr` and `endAttr` arguments, the same as in `collapse_ranges`.
 
 ## fill\_ranges
 
