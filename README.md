@@ -470,5 +470,5 @@ df
 
 Note that this feature is somewhat experimental & currently the columns
 to be filled are - for safety reasons - automatically converted to
-`character`. Additional checks & more flexibility will be added in the
+*character*. Additional checks & more flexibility will be added in the
 future.
