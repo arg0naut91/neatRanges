@@ -43,7 +43,7 @@ fill_ranges <- function(df,
 
     for (j in c(start_var, end_var)) set(dfCopy, j = j, value = as.Date(as.character(dfCopy[[j]]), format = fmt))
 
-  } else if (dimension == "timestamp" & (!class(dfCopy[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(dfCopy[[end_var]]) %in% c('POSIXct', 'POSIXt')) ) {
+  } else if (dimension == "timestamp" & (!any(class(dfCopy[[start_var]]) %in% c('POSIXct', 'POSIXlt')) | !any(class(dfCopy[[end_var]]) %in% c('POSIXct', 'POSIXlt'))) ) {
 
     if (fmt == "%Y-%m-%d") {
 

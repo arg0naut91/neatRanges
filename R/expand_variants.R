@@ -94,7 +94,7 @@ expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
     start_var, end_var
   )
   
-  if (!class(expdf[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(expdf[[end_var]]) %in% c('POSIXct', 'POSIXt')) {
+  if (!any(class(expdf[[start_var]]) %in% c('POSIXct', 'POSIXlt')) | !any(class(expdf[[end_var]]) %in% c('POSIXct', 'POSIXlt'))) {
     
     for (j in c(start_var, end_var)) set(expdf, j = j, value = as.POSIXct(as.character(expdf[[j]]), format = fmt, tz = tz))
     

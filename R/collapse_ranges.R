@@ -157,7 +157,7 @@ collapse_ranges <- function(df,
     
   } else if (dimension == "timestamp") {
     
-    if (!class(df_collapsed[[start_var]]) %in% c('POSIXct', 'POSIXt') | !class(df_collapsed[[end_var]]) %in% c('POSIXct', 'POSIXt')) {
+    if (!any(class(df_collapsed[[start_var]]) %in% c('POSIXct', 'POSIXlt')) | !any(class(df_collapsed[[end_var]]) %in% c('POSIXct', 'POSIXlt'))) {
       
       if (fmt == "%Y-%m-%d") {
         
