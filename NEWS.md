@@ -3,7 +3,7 @@ neatRanges 0.1.3
 
 ### Minor changes
 
-- Using `timestamp` as dimension produced unnecessarily warning due to checks; this has been fixed.
+- Using `timestamp` as dimension produced an unnecessary warning due to checks; this has been fixed.
   
 ---
 
