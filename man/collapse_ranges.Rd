@@ -11,7 +11,7 @@ collapse_ranges(
   end_var = NULL,
   startAttr = NULL,
   endAttr = NULL,
-  dimension = "date",
+  dimension = c("date", "timestamp"),
   max_gap = 0L,
   fmt = "\%Y-\%m-\%d",
   tz = "UTC",
@@ -19,13 +19,13 @@ collapse_ranges(
 )
 }
 \arguments{
-\item{df}{Your data frame}
+\item{df}{Your data frame (object of class 'data.frame' or 'data.table')}
 
-\item{groups}{Grouping variables}
+\item{groups}{Grouping variables, character strings}
 
-\item{start_var}{Start of the range}
+\item{start_var}{Start of the range, character of length 1L}
 
-\item{end_var}{End of the range}
+\item{end_var}{End of the range,  character of length 1L}
 
 \item{startAttr}{Attributes linked to start of the range which should be kept (converted to character type by default)}
 
@@ -39,23 +39,27 @@ collapse_ranges(
 
 \item{tz}{Time zone, defaults to UTC}
 
-\item{origin}{Origin for timestamp conversion, defaults to 1970-01-01}
+\item{origin}{Origin for timestamp conversion, defaults to '1970-01-01'}
 }
 \value{
-Returns a data frame (if initial input data.table, then data.table) with collapsed records.
+'data.frame' if initial input is a 'data.frame', 'data.table' if original object is a 'data.table' with collapsed records.
 }
 \description{
 The date/time ranges where the gap between two records is equal to or less than max_gap parameter are collapsed into one record.
 }
 \examples{
 df_collapse <- data.frame(
-id = c(rep("1111", 3), rep("2222", 3)),
-rating = c("A+", "AA", "AA", rep("B-", 3)),
-start_date = c("2014-01-01", "2015-01-01", "2016-01-01",
-              "2017-01-01", "2018-01-01", "2019-01-01"),
-end_date = c("2014-12-31", "2015-12-31", "2016-03-01",
-            "2017-01-31", "2018-12-31", "2020-02-01")
-            )
+  id = c(rep("1111", 3), rep("2222", 3)),
+  rating = c("A+", "AA", "AA", rep("B-", 3)),
+  start_date = c(
+    "2014-01-01", "2015-01-01", "2016-01-01",
+    "2017-01-01", "2018-01-01", "2019-01-01"
+  ),
+  end_date = c(
+    "2014-12-31", "2015-12-31", "2016-03-01",
+    "2017-01-31", "2018-12-31", "2020-02-01"
+  )
+)
 
 collapse_ranges(df_collapse, c("id", "rating"), "start_date", "end_date")
 }

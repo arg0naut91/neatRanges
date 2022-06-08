@@ -10,7 +10,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 List updateAndSubsetTime(Rcpp::DatetimeVector From, Rcpp::DatetimeVector To, int max_gap, Rcpp::Nullable<Rcpp::List> startObjects = R_NilValue, Rcpp::Nullable<Rcpp::List> endObjects = R_NilValue) {
     
-    if (startObjects.isNull() & endObjects.isNull()) {
+    if (startObjects.isNull() && endObjects.isNull()) {
         
         Rcpp::LogicalVector idx(From.size(), TRUE);
         
@@ -32,7 +32,7 @@ List updateAndSubsetTime(Rcpp::DatetimeVector From, Rcpp::DatetimeVector To, int
         return Rcpp::List::create(From[idx], To[idx]);
     }
     
-    else if (startObjects.isNotNull() & endObjects.isNotNull()) {
+    else if (startObjects.isNotNull() && endObjects.isNotNull()) {
         
         Rcpp::LogicalVector idx(From.size(), TRUE);
         
@@ -115,7 +115,7 @@ List updateAndSubsetTime(Rcpp::DatetimeVector From, Rcpp::DatetimeVector To, int
         
     }
     
-    else if (startObjects.isNotNull() & endObjects.isNull()) {
+    else if (startObjects.isNotNull() && endObjects.isNull()) {
         
         Rcpp::LogicalVector idx(From.size(), TRUE);
         

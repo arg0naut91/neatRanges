@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // updateAndSubset
 List updateAndSubset(Rcpp::DateVector From, Rcpp::DateVector To, int max_gap, Rcpp::Nullable<Rcpp::List> startObjects, Rcpp::Nullable<Rcpp::List> endObjects);
 RcppExport SEXP _neatRanges_updateAndSubset(SEXP FromSEXP, SEXP ToSEXP, SEXP max_gapSEXP, SEXP startObjectsSEXP, SEXP endObjectsSEXP) {

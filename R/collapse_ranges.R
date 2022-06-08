@@ -14,7 +14,7 @@
 #' @param tz Time zone, defaults to UTC
 #' @param origin Origin for timestamp conversion, defaults to '1970-01-01'
 #'
-#' @return 'data.frame' if initial input is a 'data.frame', 'data.table' if originall object is a 'data.table' with collapsed records.
+#' @return 'data.frame' if initial input is a 'data.frame', 'data.table' if original object is a 'data.table' with collapsed records.
 #'
 #' @examples
 #' df_collapse <- data.frame(
@@ -44,7 +44,7 @@ collapse_ranges <- function(df,
                             tz = "UTC",
                             origin = "1970-01-01") {
   
-  if (missing(start_var) || missing(end_var) || # user did not specify those function aguments
+  if (missing(start_var) || missing(end_var) || # user did not specify those function arguments
       is.null(start_var) || is.null(end_var) || # or specified them as NULLs
       length(start_var) != 1L || length(end_var) != 1L) { # 'start_var' or 'end_var' should be of length 1L
     stop("'start_var' and 'end_var' function parameters must be given, not NULL and of length 1L!")
