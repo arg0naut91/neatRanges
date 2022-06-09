@@ -80,15 +80,11 @@ combine_ranges <- function(dfs,
                          tz = tz,
                          origin = origin
                          )
-
+  
   if (!chckClass) {
-
-    return(setDF(dfs))
-
-  } else {
-
-    return(dfs)
-
+    on.exit(setDF(dfs), add = TRUE) # return data.frame if inputs were data.frames, or data.table if inputs were data.tables
   }
+
+  return(dfs)
 
 }

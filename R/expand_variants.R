@@ -29,10 +29,13 @@ expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
   grouping <- c(vars_to_keep, rown)
 
   expdf <- copy(df)
+  
+  if (!inherits(expdf, "data.table")) {
+    setDT(expdf)
+    on.exit(setDF(expdf), add = TRUE) # return data.frame if input was data.frame, or data.table if input was data.table
+  }
 
-  if (!any(class(expdf) %in% "data.table")) setDT(expdf)
-
-  if (class(expdf[[start_var]]) != 'Date' | class(expdf[[end_var]]) != 'Date') {
+  if (any(class(expdf[[start_var]]) != 'Date') | any(class(expdf[[end_var]]) != 'Date')) {
 
     for (j in c(start_var, end_var)) set(expdf, j = j, value = as.Date(as.character(expdf[[j]]), format = fmt))
 
@@ -45,15 +48,7 @@ expand_dates <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
 
   setnames(expdf, "Expanded", name)
 
-  if (!any(class(df) %in% "data.table")) {
-
-    return(setDF(expdf))
-
-  } else {
-
-    return(expdf)
-
-  }
+  return(expdf)
 
 }
 
@@ -89,6 +84,11 @@ expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
   grouping <- c(vars_to_keep, rown)
 
   expdf <- copy(df)
+  
+  if (!inherits(expdf, "data.table")) {
+    setDT(expdf)
+    on.exit(setDF(expdf), add = TRUE) # return data.frame if input was data.frame, or data.table if input was data.table
+  }
 
   rangevars <- c(
     start_var, end_var
@@ -100,18 +100,10 @@ expand_times <- function(df, start_var, end_var, name = "Expanded", fmt = "%Y-%m
     
   }
 
-  expdf <- setDT(expdf)[, rn := seq(.N)][, .(Expanded = seq.POSIXt(get(start_var), get(end_var), by = unit)), by = mget(grouping)][, rn := NULL]
+  expdf <- expdf[, rn := seq(.N)][, .(Expanded = seq.POSIXt(get(start_var), get(end_var), by = unit)), by = mget(grouping)][, rn := NULL]
 
   setnames(expdf, "Expanded", name)
 
-  if (!any(class(df) %in% "data.table")) {
-
-    return(setDF(expdf))
-
-  } else {
-
-    return(expdf)
-
-  }
+  return(expdf)
 
 }

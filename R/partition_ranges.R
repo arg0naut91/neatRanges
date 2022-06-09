@@ -22,9 +22,12 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
 
   partitioned <- copy(df)
 
-  if (!any(class(partitioned) %in% "data.table")) setDT(partitioned)
+  if (!inherits(partitioned, "data.table")) {
+    setDT(partitioned)
+    on.exit(setDF(partitioned), add = TRUE) # return data.frame if input was data.frame, or data.table if input was data.table
+  }
 
-  if (class(partitioned[[start_var]]) != 'Date' | class(partitioned[[end_var]]) != 'Date') {
+  if (any(class(partitioned[[start_var]]) != 'Date') | any(class(partitioned[[end_var]]) != 'Date')) {
 
     for (j in c(start_var, end_var)) set(partitioned, j = j, value = as.Date(as.character(partitioned[[j]]), format = fmt))
 
@@ -108,17 +111,7 @@ partition_ranges <- function(df, start_var, end_var, fmt = "%Y-%m-%d", vars_to_k
     stop("partition_by argument has to be either 'year' or 'month'.")
     
   }
-  
-  if (!any(class(df) %in% "data.table")) {
-    
-    return(setDF(partitioned))
-    
-  }
-  
-  else {
-    
-    return(partitioned)
-    
-  }
-  
+
+  return(partitioned)
+
 }

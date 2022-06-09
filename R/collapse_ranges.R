@@ -52,7 +52,7 @@ collapse_ranges <- function(df,
   
   if (!start_var %chin% colnames(df) || # 'start_var' not to be found in the 'df'
       !end_var %chin% colnames(df) ) { # 'end_var' not to be found in the 'df'
-    stop("By you given 'start_var' or 'end_var' parameters columns not found in 'df'")
+    stop("'start_var' and/or 'end_var' function parameter(s) not found in 'df'")
   }
   
   if (!missing(max_gap)) { # if something else then default is given, check
@@ -89,9 +89,9 @@ collapse_ranges <- function(df,
   dimension <- tolower(dimension)
   dimension <- match.arg(dimension) # default value (if not given) is 'date'
   
-  df_collapsed <- switch(dimension, # switch encapsulates the logic betwen options 'date' and 'timestamp' better I think
+  df_collapsed <- switch(dimension, # switch encapsulates the logic between options 'date' and 'timestamp' better I think
                          date = {
-                           if (class(df_collapsed[[start_var]]) != "Date" || class(df_collapsed[[end_var]]) != "Date") {
+                           if (any(class(df_collapsed[[start_var]]) != "Date") || any(class(df_collapsed[[end_var]]) != "Date")) {
                              check_col_mode(df_collapsed, start_var)
                              check_col_mode(df_collapsed, end_var)
                              

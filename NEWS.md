@@ -1,3 +1,13 @@
+neatRanges 0.1.4
+================
+
+### Minor changes
+
+- Using `date` as dimension produced an error in case a timestamp column with multiple classes had been used; fixed in this release.  
+- Not assigning the function to an object usually resulted in no output to the console; it is now printed to the console.  
+  
+---
+
 neatRanges 0.1.3
 ================
 

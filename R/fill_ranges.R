@@ -37,9 +37,11 @@ fill_ranges <- function(df,
 
   dfCopy <- copy(df)
 
-  if (!any(class(dfCopy) %in% "data.table")) setDT(dfCopy)
+  if (!inherits(dfCopy, "data.table")) {
+    setDT(dfCopy)
+  }
 
-  if (dimension == "date" & (class(dfCopy[[start_var]]) != 'Date' | class(dfCopy[[end_var]]) != 'Date') ) {
+  if (dimension == "date" & (any(class(dfCopy[[start_var]]) != 'Date') | any(class(dfCopy[[end_var]]) != 'Date')) ) {
 
     for (j in c(start_var, end_var)) set(dfCopy, j = j, value = as.Date(as.character(dfCopy[[j]]), format = fmt))
 
@@ -103,15 +105,11 @@ fill_ranges <- function(df,
   dfFinal <- rbindlist(list(dfCopy, dfFilled), fill = T)
   
   setorderv(dfFinal, c(groups, start_var))
-
-  if (!any(class(df) %in% "data.table")) {
-
-    return(setDF(dfFinal))
-
-  } else {
-
-    return(dfFinal)
-
+  
+  if (!inherits(df, "data.table")) {
+    on.exit(setDF(dfFinal), add = TRUE) # return data.frame if input was data.frame, or data.table if input was data.table
   }
+
+  return(dfFinal)
 
 }
