@@ -3,7 +3,7 @@ neatRanges
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-last-release/neatRanges)](https://cran.r-project.org/package=neatRanges)
 [![R-CMD-check](https://github.com/arg0naut91/neatRanges/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/arg0naut91/neatRanges/actions/workflows/check-standard.yaml)
-[![codecov](https://codecov.io/gh/arg0naut91/neatRanges/branch/master/graph/badge.svg)](https://codecov.io/gh/arg0naut91/neatRanges)
+[![test-coverage](https://github.com/arg0naut91/neatRanges/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/arg0naut91/neatRanges/actions/workflows/test-coverage.yaml)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 The aim of `neatRanges` is to provide tools for working with date &
